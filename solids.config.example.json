@@ -1,16 +1,14 @@
 {
-  "birthday": "2025-12-27",
-  "baby_name": "Ava",
-  "spreadsheet_id": "1FxFKrG2HKH-FV_viquagypDUaUi22jefCWNisbfw0Fc",
+  "birthday": "2025-01-01",
+  "baby_name": "the baby",
+  "spreadsheet_id": "PUT_YOUR_SHEET_ID_HERE",
   "log_tab": "Log",
   "plan_tab": "Plan",
   "status_tab": "Status",
-  "mail_to": "lishajonfamily@gmail.com",
-  "mail_from": "onboarding@resend.dev",
+  "mail_to": "you@example.com",
+  "mail_from": "you@example.com",
   "mail_transport": "resend",
   "outbox_tab": "Outbox",
-  "grocery_weekday": 5,
-  "allergen_interval_days": 4.0,
   "iron_days_per_week": 6,
   "bitter_per_week": 4,
   "veg_to_fruit_ratio": 3.0,
@@ -24,5 +22,7 @@
   "secondaries_per_day": 5,
   "lookahead_days": 7,
   "prefer_weekend_for_new_allergen": true,
-  "excluded": []
+  "excluded": [],
+  "weekly_email_weekday": 5,
+  "week_starts_tomorrow": true
 }

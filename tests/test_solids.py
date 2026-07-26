@@ -316,22 +316,106 @@ def test_excluded_foods_are_respected():
 
 # ---------------------------------------------------------------- render ----
 
-def test_email_renders_without_blowing_up():
-    from solids.render import render_email_html
+# ------------------------------------------------------- weekly rotation ----
+
+def test_every_allergen_comes_up_in_a_single_week():
+    """The rotation is even and ignores dates, so a week covers all nine."""
+    from solids.config import ALLERGENS
+    from solids.engine import _allergens_for_day
+
+    for start_offset in range(14):
+        start = TODAY + dt.timedelta(days=start_offset)
+        week = {
+            a
+            for i in range(7)
+            for a in _allergens_for_day(start + dt.timedelta(days=i), CFG)
+        }
+        assert set(ALLERGENS) == week, f"week from {start} missed {set(ALLERGENS) - week}"
+
+
+def test_the_rotation_does_not_depend_on_what_was_logged():
+    from solids.engine import _allergens_for_day
+
+    day = dt.date(2026, 8, 3)
+    assert _allergens_for_day(day, CFG) == _allergens_for_day(day, Config())
+
+
+def test_nothing_is_ever_described_as_overdue():
+    """Repeat feedings are not written down, so lateness cannot be claimed."""
+    from solids.render import render_status_text, render_week_text
 
     s = snap(BASELINE)
     plans = plan_ahead(BASELINE, CATALOG, CFG, TODAY, 7)
-    html = render_email_html(plans, s, plans[0], "https://example.com", "https://example.com")
-    assert "Ava" in html
+    text = render_status_text(s) + render_week_text(plans, s)
+    for plan in plans:
+        for a in plan.anchors:
+            text += a.reason
+    # "days ago" is fine when it refers to a reaction date, which is recorded
+    # reliably. What must never appear is an allergen being called late.
+    for word in ("overdue", "target is every", "last landed", "days out"):
+        assert word not in text.lower(), f"found {word!r} in the output"
+
+
+# ------------------------------------------------------------- vitamin C ----
+
+def test_plant_iron_gets_a_vitamin_c_partner():
+    plans = plan_ahead(BASELINE, CATALOG, CFG, TODAY, 21)
+    checked = 0
+    for plan in plans:
+        foods = [a.food for a in plan.anchors]
+        if not any(f.plant_iron for f in foods):
+            continue
+        checked += 1
+        has_c = any(f.vitamin_c >= 1 for f in foods) or plan.vitamin_c is not None
+        assert has_c, f"{plan.date} planned {plan.anchor_names} with no vitamin C"
+    assert checked, "no plant-iron days in the sample"
+
+
+def test_heme_iron_needs_no_partner():
+    """Iron from meat and fish is absorbed fine on its own."""
+    assert CATALOG.get("Beef").heme_iron
+    assert CATALOG.get("Sardine").heme_iron
+    assert not CATALOG.get("Egg").heme_iron   # animal, but non-heme iron
+    assert CATALOG.get("Lentils").plant_iron
+    assert not CATALOG.get("Beef").plant_iron
+
+
+# ------------------------------------------------------------- labelling ----
+
+def test_foods_are_labelled_with_the_allergen_they_cover():
+    from solids.model import label_with_allergen
+
+    assert label_with_allergen(CATALOG.get("Peanut butter")) == "Peanut butter (peanut)"
+    assert label_with_allergen(CATALOG.get("Tahini")) == "Tahini (sesame)"
+    assert label_with_allergen(CATALOG.get("Broccoli")) == "Broccoli"
+
+
+def test_new_foods_are_called_out_by_name():
+    for plan in plan_ahead(BASELINE, CATALOG, CFG, TODAY, 14):
+        if plan.new_foods:
+            assert plan.new_names
+            assert plan.new_foods[0].food.name in plan.new_names
+        else:
+            assert plan.new_names == ""
+
+
+def test_week_email_renders_a_row_per_day():
+    from solids.render import render_week_html
+
+    s = snap(BASELINE)
+    plans = plan_ahead(BASELINE, CATALOG, CFG, TODAY, 7)
+    html = render_week_html(plans, s, "https://example.com")
+    assert html.count("<tr") >= 8  # header plus seven days
+    assert "Shopping list" in html
     assert "<script" not in html
 
 
 def test_email_escapes_food_notes():
-    from solids.render import render_email_html
+    from solids.render import render_week_html
 
     s = snap(BASELINE)
     plans = plan_ahead(BASELINE, CATALOG, CFG, TODAY, 3)
     plans[0].cautions.append("<img src=x onerror=alert(1)>")
-    html = render_email_html(plans, s)
+    html = render_week_html(plans, s)
     assert "<img src=x" not in html
     assert "&lt;img" in html

@@ -1,0 +1,77 @@
+name: Solids
+
+on:
+  schedule:
+    # Every morning: refresh the Plan and Status tabs. No email.
+    # 13:00 UTC is 6am Pacific in summer, 5am in winter.
+    - cron: "0 13 * * *"
+    # Saturday afternoon: plan the coming week and email the table.
+    # 21:00 UTC is 2pm Pacific in summer, 1pm in winter.
+    - cron: "0 21 * * 6"
+  workflow_dispatch:
+    inputs:
+      job:
+        description: "Which job to run"
+        type: choice
+        options: [daily, weekly]
+        default: weekly
+      dry_run:
+        description: "Render without sending"
+        type: boolean
+        default: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -e .
+
+      - name: Write the config
+        env:
+          SOLIDS_CONFIG_JSON: ${{ secrets.SOLIDS_CONFIG_JSON }}
+        run: |
+          if [ -z "$SOLIDS_CONFIG_JSON" ]; then
+            echo "SOLIDS_CONFIG_JSON secret is not set." >&2
+            exit 1
+          fi
+          printf '%s' "$SOLIDS_CONFIG_JSON" > runtime.config.json
+
+      - name: Run
+        env:
+          SOLIDS_CONFIG: runtime.config.json
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          # Only needed when mail_transport is "resend" or "smtp".
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: |
+          # The 21:00 schedule is the weekly one; everything else is the daily.
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            case "${{ github.event.schedule }}" in
+              "0 21 * * 6") JOB=weekly ;;
+              *)            JOB=daily ;;
+            esac
+            DRY=""
+          else
+            JOB="${{ inputs.job }}"
+            [ "${{ inputs.dry_run }}" = "true" ] && DRY="--dry-run" || DRY=""
+          fi
+          echo "Running: solids $JOB $DRY"
+          solids "$JOB" $DRY
+
+      - name: Keep the rendered email from a dry run
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: email
+          path: solids-*.html
+          if-no-files-found: ignore
+
+      - name: Never leave the config behind
+        if: always()
+        run: rm -f runtime.config.json

@@ -54,18 +54,15 @@ def status_lines(snap: Snapshot) -> list[tuple[str, str, bool]]:
         snap.iron_short,
     ))
 
-    overdue = snap.overdue_allergens()
+    # Nothing here counts days since an allergen was last eaten. Repeat feedings
+    # do not get written down, so that number would be fiction. First exposures
+    # do get written down, so "not yet tried" is worth showing.
     missing = snap.missing_allergens()
     if missing:
         names = ", ".join(ALLERGEN_LABELS[a] for a in missing)
         out.append(("Allergens not yet tried", names, True))
-    if overdue:
-        names = ", ".join(
-            f"{ALLERGEN_LABELS[a]} ({snap.days_since_allergen(a)}d)" for a, _ in overdue
-        )
-        out.append(("Allergens overdue", names, True))
-    if not missing and not overdue:
-        out.append(("Allergens", "all nine in rotation", False))
+    else:
+        out.append(("Allergens", "all nine tried, and on the weekly rotation", False))
 
     ratio = snap.veg_ratio
     ratio_s = "no fruit" if ratio == float("inf") else f"{ratio:.1f} to 1"
@@ -113,6 +110,14 @@ def render_day_text(plan: DayPlan, snap: Snapshot) -> str:
             lines.append(f"        why: {a.reason}")
         lines.append(f"        {a.food.url}")
 
+    if plan.new_names:
+        lines.append("")
+        lines.append(f"  NEW TODAY: {plan.new_names}")
+    if plan.vitamin_c:
+        lines.append(
+            f"  SERVE WITH: {plan.vitamin_c.name}, for the vitamin C. "
+            f"It markedly increases how much of the iron she absorbs."
+        )
     if plan.secondaries:
         lines.append("")
         lines.append(f"  ALSO GOOD (any of these): {plan.secondary_names}")
@@ -220,144 +225,173 @@ def _e(s: str) -> str:
     return html.escape(s, quote=True)
 
 
-def render_email_html(
+_WEEK_CSS = """
+.week { width:100%; border-collapse:collapse; font-size:13px; }
+.week th { text-align:left; font-size:10px; text-transform:uppercase;
+  letter-spacing:0.06em; color:#8a8379; font-weight:600; padding:0 8px 8px 0;
+  border-bottom:1px solid #e5e1da; }
+.week td { padding:11px 8px 11px 0; border-bottom:1px solid #efece6;
+  vertical-align:top; }
+.week tr:last-child td { border-bottom:none; }
+.week .d { white-space:nowrap; font-weight:600; width:1%; }
+.week .m { font-weight:600; }
+.week .k { color:#6b6660; }
+.week .n { color:#40632f; font-weight:600; white-space:nowrap; }
+.week .r { background:#fdf6ec; }
+.scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+"""
+
+
+def render_week_html(
     plans: list[DayPlan],
     snap: Snapshot,
-    yesterday: DayPlan | None = None,
-    confirm_url: str | None = None,
     log_url: str | None = None,
 ) -> str:
+    """The Saturday email: the coming week as a table, then the shopping list."""
     cfg = snap.config
-    today_plan = plans[0]
-    band = cfg.age_band(today_plan.date)
-    p: list[str] = []
+    p: list[str] = [f"<style>{_CSS}{_WEEK_CSS}</style><div class='wrap'>"]
+    start, end = plans[0].date, plans[-1].date
 
-    p.append(f"<style>{_CSS}</style><div class='wrap'>")
     p.append(
-        f"<h1>{_e(cfg.baby_name)}, {_e(pretty_date(today_plan.date))}</h1>"
-        f"<p class='sub'>{_e(age_string(cfg, today_plan.date))}</p>"
+        f"<h1>The week ahead</h1>"
+        f"<p class='sub'>{_e(short_date(start))} through {_e(short_date(end))} &middot; "
+        f"{_e(age_string(cfg, start))}</p>"
     )
 
-    # --- yesterday ---
-    if yesterday and yesterday.anchors:
-        p.append("<div class='card'>")
-        p.append("<h2>Yesterday</h2>")
+    # --- the table ---
+    p.append("<div class='card'><h2>The plan</h2><div class='scroll'>")
+    p.append(
+        "<table class='week'><tr><th>Day</th><th>Main</th>"
+        "<th>Also serve</th><th>New</th></tr>"
+    )
+    for plan in plans:
+        rowcls = " class='r'" if plan.new_foods or any(
+            a.is_rechallenge for a in plan.anchors
+        ) else ""
+        keepers = plan.keeper_names
+        if plan.vitamin_c:
+            extra = f"{plan.vitamin_c.name} (vitamin C)"
+            keepers = f"{keepers}, {extra}" if keepers else extra
         p.append(
-            f"<p class='chips'>The plan was <b>{_e(yesterday.anchor_names)}</b>. "
-            f"Did that happen?</p>"
+            f"<tr{rowcls}>"
+            f"<td class='d'>{_e(plan.date.strftime('%a'))}</td>"
+            f"<td class='m'>{_e(plan.main_names or '-')}</td>"
+            f"<td class='k'>{_e(keepers or '-')}</td>"
+            f"<td class='n'>{_e(plan.new_names or '')}</td>"
+            f"</tr>"
         )
-        if confirm_url:
+    p.append("</table></div>")
+    p.append(
+        "<p class='why'>Highlighted rows are the days with something new or a "
+        "re-try on them. Those are the days to keep the rest of the plate boring.</p>"
+    )
+    p.append("</div>")
+
+    # --- shopping ---
+    by_category: dict[str, list[str]] = {}
+    seen: set[str] = set()
+    for plan in plans:
+        for food in plan.all_foods():
+            if food.key in seen:
+                continue
+            seen.add(food.key)
+            by_category.setdefault(food.category, []).append(food.name)
+
+    p.append("<div class='card'><h2>Shopping list</h2>")
+    for category in ("protein", "vegetable", "fruit", "legume", "grain", "dairy", "nut_seed"):
+        if category not in by_category:
+            continue
+        p.append(
+            f"<p class='why' style='margin-bottom:2px'>"
+            f"{_e(category.replace('_', ' ').title())}</p>"
+            f"<p class='chips' style='margin-bottom:14px'>"
+            f"{_e(', '.join(sorted(by_category[category])))}</p>"
+        )
+    p.append(
+        "<p class='why'>The secondaries are already in this list, so nothing in "
+        "the week needs a second trip.</p></div>"
+    )
+
+    # --- how to serve the new things ---
+    new_items = [a for plan in plans for a in plan.new_foods]
+    retries = [a for plan in plans for a in plan.anchors if a.is_rechallenge]
+    if new_items or retries:
+        p.append("<div class='card'><h2>The ones to read about first</h2>")
+        for a in new_items + retries:
+            band = cfg.age_band(start)
+            p.append("<div class='item'>")
             p.append(
-                f"<p class='why' style='margin-top:10px'>"
-                f"<a href='{_e(confirm_url)}'>Tap here and type yes, some, or no</a>. "
-                f"If you skip it, we assume it happened.</p>"
+                f"<p class='keeper-food'>{_e(a.food.name)}"
+                + ("<span class='badge badge-new'>new</span>" if a.is_new
+                   else "<span class='badge badge-retry'>re-try</span>")
+                + "</p>"
             )
-        p.append("</div>")
-
-    # --- today ---
-    def food_block(a, small: bool = False) -> None:
-        badge = ""
-        if a.is_new:
-            badge = "<span class='badge badge-new'>new</span>"
-        elif a.is_rechallenge:
-            badge = "<span class='badge badge-retry'>re-try</span>"
-        cls = "keeper-food" if small else "main-food"
-        p.append("<div class='item'>")
-        p.append(f"<p class='{cls}'>{_e(a.food.name)}{badge}</p>")
-        prep = a.food.prep_for(band)
-        if prep:
-            p.append(f"<p class='how'>{_e(prep)}</p>")
-        if a.reasons:
-            p.append(f"<p class='why'>Why: {_e(a.reason)}</p>")
-        p.append(
-            f"<p class='why link'><a href='{_e(a.food.url)}'>"
-            f"Solid Starts on {_e(a.food.name.lower())}</a></p>"
-        )
-        p.append("</div>")
-
-    if today_plan.mains:
-        heading = (
-            "Re-try today"
-            if any(a.is_rechallenge for a in today_plan.mains)
-            else "Today"
-        )
-        p.append(f"<div class='card'><h2>{heading}</h2>")
-        for a in today_plan.mains:
-            food_block(a)
-        p.append("</div>")
-
-    if today_plan.keepers:
-        p.append("<div class='card'><h2>Keep these in too</h2>")
-        p.append(
-            "<p class='why' style='margin:0 0 4px'>Allergens that are due again. "
-            "A spoonful or a thin spread alongside the main is plenty.</p>"
-        )
-        for a in today_plan.keepers:
-            food_block(a, small=True)
-        p.append("</div>")
-
-    # --- secondaries ---
-    if today_plan.secondaries:
-        p.append("<div class='card'>")
-        p.append("<h2>Round it out with any of these</h2>")
-        p.append(f"<p class='chips'>{_e(today_plan.secondary_names)}</p>")
-        p.append(
-            "<p class='why'>Pick whatever is in the fridge. These are all things "
-            "she has taken before, so none of it is a test.</p>"
-        )
-        if today_plan.flavor:
+            if a.food.prep_for(band):
+                p.append(f"<p class='how'>{_e(a.food.prep_for(band))}</p>")
+            if a.food.note:
+                p.append(f"<p class='why'>{_e(a.food.note)}</p>")
             p.append(
-                f"<p class='why'>Flavor of the day: <b>{_e(today_plan.flavor.name)}</b>, "
-                f"{_e(today_plan.flavor.prep_for(band).lower())}</p>"
+                f"<p class='why link'><a href='{_e(a.food.url)}'>"
+                f"Solid Starts on {_e(a.food.name.lower())}</a></p>"
             )
+            p.append("</div>")
         p.append("</div>")
 
-    # --- cautions ---
-    if today_plan.cautions:
-        p.append("<div class='card watch'>")
-        p.append("<h2>Worth knowing</h2><ul>")
-        for c in today_plan.cautions:
+    # --- cautions worth carrying for the week ---
+    cautions: list[str] = []
+    for plan in plans:
+        for c in plan.cautions:
+            if c not in cautions:
+                cautions.append(c)
+    if cautions:
+        p.append("<div class='card watch'><h2>Worth knowing</h2><ul>")
+        for c in cautions:
             p.append(f"<li>{_e(c)}</li>")
         p.append("</ul></div>")
 
-    # --- lookahead ---
-    if len(plans) > 1:
-        p.append("<div class='card'>")
-        p.append("<h2>Coming up</h2>")
-        for plan in plans[1:]:
-            p.append(
-                f"<div class='day'><b>{_e(short_date(plan.date))}</b> &nbsp; "
-                f"{_e(plan.main_names or plan.keeper_names)}"
-                + (f" <span style='color:#8a8379'>+ {_e(plan.keeper_names)}</span>"
-                   if plan.main_names and plan.keeper_names else "")
-                + "</div>"
-            )
-        p.append("</div>")
-
     # --- status ---
-    p.append("<div class='card'>")
-    p.append(f"<h2>Where {_e(cfg.baby_name)} stands</h2><table>")
+    p.append("<div class='card'><h2>Where she stands</h2><table>")
     for label, value, problem in status_lines(snap):
         cls = " class='flag'" if problem else ""
-        p.append(
-            f"<tr><td class='label'>{_e(label)}</td><td{cls}>{_e(value)}</td></tr>"
-        )
+        p.append(f"<tr><td class='label'>{_e(label)}</td><td{cls}>{_e(value)}</td></tr>")
     p.append("</table></div>")
 
     if log_url:
         p.append(f"<a class='cta' href='{_e(log_url)}'>Log a reaction</a>")
     p.append(
-        "<p class='foot'>Reactions only ever come from you, never assumed. "
-        "If something looks wrong here, it probably is, and you should trust yourself "
-        "over this email.</p>"
+        "<p class='foot'>Nothing here is recorded as eaten unless someone says so. "
+        "If a day goes sideways, skip it and the next week reshuffles around it.</p>"
     )
     p.append("</div>")
     return "".join(p)
 
 
-def render_email_subject(plan: DayPlan, cfg: Config) -> str:
-    names = plan.anchor_names or "Solids"
-    return f"{cfg.baby_name} today: {names}"
+def render_week_text(plans: list[DayPlan], snap: Snapshot) -> str:
+    start, end = plans[0].date, plans[-1].date
+    lines = [f"The week ahead: {short_date(start)} through {short_date(end)}", ""]
+    width = max(len(p.main_names or "-") for p in plans)
+    for plan in plans:
+        new = f"   NEW: {plan.new_names}" if plan.new_names else ""
+        also = plan.keeper_names
+        if plan.vitamin_c:
+            extra = f"{plan.vitamin_c.name} (vitamin C)"
+            also = f"{also}, {extra}" if also else extra
+        lines.append(
+            f"  {plan.date.strftime('%a')}  {(plan.main_names or '-').ljust(width)}"
+            f"   {also}{new}"
+        )
+    lines.append("")
+    lines.append(render_grocery_text(plans, snap))
+    lines.append("")
+    lines.append(render_status_text(snap))
+    return "\n".join(lines)
+
+
+def render_week_subject(plans: list[DayPlan], cfg: Config) -> str:
+    new = [a.food.name for plan in plans for a in plan.new_foods]
+    if new:
+        return f"This week: {', '.join(new[:3])}" + (" and more" if len(new) > 3 else "")
+    return f"This week's plan, from {short_date(plans[0].date)}"
 
 
 def render_grocery_html(plans: list[DayPlan], snap: Snapshot) -> str:

@@ -1,403 +1,2325 @@
 {
-  "_schema": {
-    "name": "Display name.",
-    "slug": "Solid Starts URL slug -> https://solidstarts.com/foods/<slug>/",
-    "category": "vegetable | fruit | protein | legume | grain | dairy | nut_seed | flavor | other",
-    "allergen": "One of the common allergens, or null: peanut, egg, dairy, wheat, soy, sesame, tree_nut, fish, shellfish",
-    "iron": "0 negligible, 1 moderate, 2 high",
-    "bitter": "Counts toward the bitter-flavor exposure goal.",
-    "sweet": "Counts as a sweet fruit in the vegetable:fruit ratio.",
-    "min_age": "Earliest age in months we will recommend it.",
-    "prep": "Baby-led weaning prep, keyed by age band (6 = 6-8mo, 9 = 9-11mo, 12 = 12mo+).",
-    "note": "Anything worth saying out loud, especially choking risk.",
-    "aliases": "Alternate spellings seen in the sheet."
+ "_schema": {
+  "name": "Display name.",
+  "slug": "Solid Starts URL slug -> https://solidstarts.com/foods/<slug>/",
+  "category": "vegetable | fruit | protein | legume | grain | dairy | nut_seed | flavor | other",
+  "allergen": "One of the common allergens, or null: peanut, egg, dairy, wheat, soy, sesame, tree_nut, fish, shellfish",
+  "iron": "0 negligible, 1 moderate, 2 high",
+  "bitter": "Counts toward the bitter-flavor exposure goal.",
+  "sweet": "Counts as a sweet fruit in the vegetable:fruit ratio.",
+  "min_age": "Earliest age in months we will recommend it.",
+  "prep": "Baby-led weaning prep, keyed by age band (6 = 6-8mo, 9 = 9-11mo, 12 = 12mo+).",
+  "note": "Anything worth saying out loud, especially choking risk.",
+  "aliases": "Alternate spellings seen in the sheet.",
+  "vitamin_c": "0 none, 1 moderate, 2 high. Eaten alongside plant iron it markedly increases absorption."
+ },
+ "foods": [
+  {
+   "name": "Broccoli",
+   "slug": "broccoli",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Steam a whole floret with a long stalk as a handle, soft enough to squish.",
+    "9": "Steam and cut into bite-size florets."
+   },
+   "vitamin_c": 2
   },
-  "foods": [
-    {"name": "Broccoli", "slug": "broccoli", "category": "vegetable", "allergen": null, "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "Steam a whole floret with a long stalk as a handle, soft enough to squish.", "9": "Steam and cut into bite-size florets."}},
-    {"name": "Cauliflower", "slug": "cauliflower", "category": "vegetable", "allergen": null, "iron": 0, "bitter": true, "min_age": 6,
-     "prep": {"6": "Steam a large floret with the stem as a handle.", "9": "Roast and cut into bite-size pieces."}},
-    {"name": "Spinach", "slug": "spinach", "category": "vegetable", "allergen": null, "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "Cook and blend into another food, or serve large wilted leaves.", "9": "Finely chop cooked spinach and mix in."}},
-    {"name": "Kale", "slug": "kale", "category": "vegetable", "allergen": null, "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "Steam whole large leaves until very soft, stems removed.", "9": "Chop cooked kale finely and mix into grains."}},
-    {"name": "Asparagus", "slug": "asparagus", "category": "vegetable", "allergen": null, "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "Steam whole spears until floppy, serve one at a time.", "9": "Cut cooked spears into short bite-size pieces."},
-     "aliases": ["aspargus"]},
-    {"name": "Brussels sprouts", "slug": "brussels-sprouts", "category": "vegetable", "allergen": null, "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "Halve and roast until very soft, serve the half.", "9": "Quarter roasted sprouts."}},
-    {"name": "Cabbage", "slug": "cabbage", "category": "vegetable", "allergen": null, "iron": 0, "bitter": true, "min_age": 6,
-     "prep": {"6": "Braise wedges until silky, serve a large soft strip.", "9": "Chop braised cabbage into short ribbons."}},
-    {"name": "Bok choy", "slug": "bok-choy", "category": "vegetable", "allergen": null, "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "Steam a whole small head, serve a soft leafy stalk.", "9": "Chop cooked bok choy small."}},
-    {"name": "Swiss chard", "slug": "swiss-chard", "category": "vegetable", "allergen": null, "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "Wilt whole leaves, serve one leaf at a time.", "9": "Finely chop cooked leaves and stems."}},
-    {"name": "Broccoli rabe", "common": false, "slug": "broccoli-rabe", "category": "vegetable", "allergen": null, "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "Braise until very soft, serve a whole stalk. Strongly bitter, expect faces.", "9": "Chop braised rabe into bite-size pieces."}},
-    {"name": "Collard greens", "slug": "collard-greens", "category": "vegetable", "allergen": null, "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "Braise whole leaves until very soft.", "9": "Chop braised collards finely."}},
-    {"name": "Arugula", "slug": "arugula", "category": "vegetable", "allergen": null, "iron": 0, "bitter": true, "min_age": 6,
-     "prep": {"6": "Wilt into eggs or pasta rather than serving raw.", "9": "Chop and mix through soft foods."}},
-    {"name": "Eggplant", "slug": "eggplant", "category": "vegetable", "allergen": null, "iron": 0, "bitter": true, "min_age": 6,
-     "prep": {"6": "Roast until collapsing, serve a finger-length strip with skin off.", "9": "Cut roasted eggplant into bite-size cubes."}},
-    {"name": "Radish", "slug": "radish", "category": "vegetable", "allergen": null, "iron": 0, "bitter": true, "min_age": 9,
-     "prep": {"9": "Roast or braise until soft, quarter. Raw is too hard and peppery."}},
-    {"name": "Artichoke", "common": false, "slug": "artichoke", "category": "vegetable", "allergen": null, "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "Steam whole, let her scrape a soft leaf. Serve the heart mashed.", "9": "Serve soft heart in bite-size pieces."}},
-    {"name": "Turnip", "slug": "turnip", "category": "vegetable", "allergen": null, "iron": 0, "bitter": true, "min_age": 6,
-     "prep": {"6": "Roast finger-length wedges until soft.", "9": "Cube roasted turnip."}},
-    {"name": "Rutabaga", "common": false, "slug": "rutabaga", "category": "vegetable", "allergen": null, "iron": 0, "bitter": true, "min_age": 6,
-     "prep": {"6": "Roast in finger-length wedges until soft.", "9": "Cube roasted rutabaga."}},
-    {"name": "Watercress", "common": false, "slug": "watercress", "category": "vegetable", "allergen": null, "iron": 1, "bitter": true, "min_age": 9,
-     "prep": {"9": "Wilt into soups or eggs, chopped fine."}},
-    {"name": "Endive", "common": false, "slug": "endive", "category": "vegetable", "allergen": null, "iron": 0, "bitter": true, "min_age": 9,
-     "prep": {"9": "Braise until soft and serve short ribbons. Very bitter."}},
-    {"name": "Zucchini", "slug": "zucchini", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Roast finger-length spears, skin on for grip.", "9": "Cut cooked zucchini into bite-size pieces."}},
-    {"name": "Cucumber", "slug": "cucumber", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Peel and serve a large finger-length spear, seeds removed. Great when teething.", "9": "Peeled bite-size pieces."}},
-    {"name": "Carrot", "slug": "carrot", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Steam or roast finger-length sticks until they squish easily.", "9": "Cooked carrot in bite-size pieces."},
-     "note": "Keep carrot cooked-soft. Raw sticks and raw rounds are a choking risk until about 4 years."},
-    {"name": "Sweet potato", "slug": "sweet-potato", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Roast finger-length wedges, skin on for grip.", "9": "Cube roasted sweet potato."}},
-    {"name": "Butternut squash", "slug": "butternut-squash", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Roast finger-length wedges until very soft.", "9": "Cube roasted squash."}},
-    {"name": "Acorn squash", "slug": "acorn-squash", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Roast a wedge, let her scoop the flesh.", "9": "Cube the soft flesh."}},
-    {"name": "Pumpkin", "slug": "pumpkin", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Roast finger-length wedges.", "9": "Cube roasted pumpkin."}},
-    {"name": "Green beans", "slug": "green-beans", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Steam whole beans until floppy, serve one at a time.", "9": "Cut cooked beans into short pieces."}},
-    {"name": "Peas", "slug": "peas", "category": "vegetable", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Smash cooked peas and mix into a scoopable food.", "9": "Whole cooked peas, lightly smashed."}},
-    {"name": "Snap peas", "slug": "sugar-snap-peas", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Steam whole pods until soft.", "9": "Chop cooked pods into short pieces."}},
-    {"name": "Beets", "slug": "beets", "category": "vegetable", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Roast finger-length wedges.", "9": "Cube roasted beets."},
-     "note": "Turns diapers red. Not blood."},
-    {"name": "Parsnip", "slug": "parsnip", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Roast finger-length spears until soft.", "9": "Cube roasted parsnip."}},
-    {"name": "Bell pepper", "slug": "bell-pepper", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Roast until skin slips off, serve a soft finger-length strip.", "9": "Bite-size pieces of roasted pepper."}},
-    {"name": "Tomato", "slug": "tomato", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Serve a large soft wedge of ripe tomato, or cooked and crushed.", "9": "Quartered cherry tomatoes, never whole."},
-     "note": "Acidic. A red rash right around the mouth is usually contact irritation, not allergy."},
-    {"name": "Cherry tomato", "slug": "tomato", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 9,
-     "prep": {"9": "Quarter lengthwise. Never serve whole or halved."},
-     "note": "Whole cherry tomatoes are a serious choking hazard until about 4 years."},
-    {"name": "Corn", "slug": "corn", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Serve a short section of cooked cob to gnaw, supervised.", "9": "Loose cooked kernels, lightly smashed."}},
-    {"name": "Celery", "slug": "celery", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 9,
-     "prep": {"9": "Cook until very soft and chop fine. Raw celery strings are a choking risk."}},
-    {"name": "Leek", "slug": "leek", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Braise until silky, serve soft rings or blend into soup.", "9": "Chop braised leek small."}},
-    {"name": "Onion", "slug": "onion", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cook until sweet and soft, mixed into other foods.", "9": "Finely chopped cooked onion."}},
-    {"name": "Mushroom", "slug": "mushrooms", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Saute until very soft and chop fine. Rubbery texture, chop small.", "9": "Finely chopped cooked mushroom."}},
-    {"name": "Okra", "common": false, "slug": "okra", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Roast whole pods until soft.", "9": "Cut cooked okra into short pieces."}},
-    {"name": "Fennel", "slug": "fennel", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Braise wedges until soft. Mild licorice flavor, good variety.", "9": "Chop braised fennel."}},
-    {"name": "Potato", "slug": "potato", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Roast finger-length wedges, or serve mashed.", "9": "Cube roasted potato."}},
-    {"name": "Yellow squash", "slug": "summer-squash", "category": "vegetable", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Roast finger-length spears.", "9": "Bite-size cooked pieces."}},
-    {"name": "Napa cabbage", "slug": "cabbage", "category": "vegetable", "allergen": null, "iron": 0, "bitter": true, "min_age": 6,
-     "prep": {"6": "Braise leaves until very soft.", "9": "Chop cooked leaves into ribbons."}},
-
-    {"name": "Avocado", "slug": "avocado", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": false, "min_age": 6,
-     "prep": {"6": "Finger-length spears of ripe avocado, rolled in fine crumbs for grip.", "9": "Bite-size cubes."}},
-    {"name": "Banana", "slug": "banana", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Half a peeled banana with a strip of peel left as a handle.", "9": "Bite-size pieces, rolled in crumbs if slippery."}},
-    {"name": "Apple", "slug": "apple", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Cook until soft, or serve a large whole peeled piece to gnaw.", "9": "Grated raw apple, or soft cooked pieces."},
-     "note": "Raw apple chunks and slices are a choking hazard. Cook or grate until about 2 years."},
-    {"name": "Pear", "slug": "pear", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Very ripe, peeled, in finger-length spears.", "9": "Bite-size pieces of ripe pear."}},
-    {"name": "Mango", "slug": "mango", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Large peeled spear of ripe mango, or the pit to gnaw.", "9": "Bite-size cubes."}},
-    {"name": "Watermelon", "slug": "watermelon", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Finger-length seedless spears.", "9": "Bite-size cubes."}},
-    {"name": "Cantaloupe", "slug": "cantaloupe", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Ripe finger-length spears.", "9": "Bite-size cubes."},
-     "aliases": ["cantelope", "canteloupe"]},
-    {"name": "Honeydew", "slug": "honeydew", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Ripe finger-length spears.", "9": "Bite-size cubes."}},
-    {"name": "Blueberry", "slug": "blueberries", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Smash flat, or serve cooked and burst.", "9": "Smashed or quartered."},
-     "note": "Whole blueberries are a choking hazard. Smash until she has a confident pincer grasp."},
-    {"name": "Strawberry", "slug": "strawberries", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "A whole large hulled strawberry to gnaw, or smashed.", "9": "Quartered lengthwise."},
-     "note": "Acidic. Rash right around the mouth is commonly contact irritation."},
-    {"name": "Raspberry", "slug": "raspberries", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Serve whole, they collapse easily, or smash into yogurt.", "9": "Whole or halved."},
-     "note": "Acidic. Perioral rash is commonly contact irritation rather than true allergy."},
-    {"name": "Blackberry", "slug": "blackberries", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Smash, the seeds and shape make whole ones tricky.", "9": "Halved."}},
-    {"name": "Peach", "slug": "peaches", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Very ripe, peeled, large spear or half with pit removed.", "9": "Bite-size pieces."}},
-    {"name": "Plum", "slug": "plums", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Ripe, pitted, halved with skin removed.", "9": "Bite-size pieces, skin removed."}},
-    {"name": "Nectarine", "slug": "nectarines", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Ripe, pitted half, skin removed.", "9": "Bite-size pieces."}},
-    {"name": "Apricot", "slug": "apricots", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Ripe, pitted half.", "9": "Bite-size pieces."}},
-    {"name": "Orange", "slug": "oranges", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "A large segment with membrane removed, supervised.", "9": "Small pieces, membrane and seeds removed."},
-     "note": "Acidic, commonly causes harmless perioral redness."},
-    {"name": "Clementine", "slug": "clementine", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Peeled segment, membrane removed.", "9": "Halved segments."}},
-    {"name": "Grapefruit", "slug": "grapefruit", "category": "fruit", "allergen": null, "iron": 0, "bitter": true, "sweet": true, "min_age": 6,
-     "prep": {"6": "Segment with membrane removed. Pleasantly bitter, good exposure.", "9": "Small pieces."}},
-    {"name": "Kiwi", "slug": "kiwi", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Peeled half or a large spear of ripe kiwi.", "9": "Bite-size pieces."}},
-    {"name": "Pineapple", "slug": "pineapple", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Ripe finger-length spear, core removed.", "9": "Bite-size pieces."},
-     "note": "Very acidic. Expect harmless mouth redness."},
-    {"name": "Papaya", "slug": "papaya", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Ripe finger-length spear, seeds removed.", "9": "Bite-size cubes."}},
-    {"name": "Grape", "slug": "grapes", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Smash flat or quarter lengthwise. Never whole.", "9": "Quartered lengthwise."},
-     "note": "Whole and halved grapes are one of the top choking hazards. Quarter lengthwise until about 4 years."},
-    {"name": "Cherry", "slug": "cherries", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Pit and smash.", "9": "Pitted and quartered."},
-     "note": "Always remove the pit."},
-    {"name": "Fig", "slug": "figs", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Ripe fresh fig, halved, flesh scooped.", "9": "Bite-size pieces of fresh fig."}},
-    {"name": "Dragon fruit", "common": false, "slug": "dragon-fruit", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Finger-length spears of peeled flesh.", "9": "Bite-size cubes."}},
-    {"name": "Persimmon", "common": false, "slug": "persimmon", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Very ripe only, peeled spear.", "9": "Bite-size pieces of ripe persimmon."}},
-    {"name": "Pomegranate", "slug": "pomegranate", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 9,
-     "prep": {"9": "Smash the arils, or mix into yogurt. Seeds are hard."}},
-    {"name": "Prune", "slug": "prunes", "category": "fruit", "allergen": null, "iron": 1, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Stew until very soft and mash, or serve a large soft piece.", "9": "Chopped stewed prune."},
-     "note": "Useful when she is constipated."},
-    {"name": "Date", "slug": "dates", "category": "fruit", "allergen": null, "iron": 1, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Pit and mash into a paste, thin with water.", "9": "Finely chopped, pitted."},
-     "note": "Sticky and dense. Always pit and mash or chop small."},
-    {"name": "Jackfruit", "common": false, "slug": "jackfruit", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Ripe pod flesh, seed removed, served as a soft strip.", "9": "Bite-size pieces."}},
-    {"name": "Guava", "common": false, "slug": "guava", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Ripe, seeds removed, soft spear.", "9": "Bite-size pieces, seeds removed."}},
-    {"name": "Lychee", "common": false, "slug": "lychee", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Peel, pit, and smash.", "9": "Peeled, pitted, quartered."},
-     "note": "Slippery and round. Always pit and cut."},
-    {"name": "Passion fruit", "common": false, "slug": "passion-fruit", "category": "fruit", "allergen": null, "iron": 0, "bitter": false, "sweet": true, "min_age": 6,
-     "prep": {"6": "Stir the pulp into yogurt or oatmeal.", "9": "Pulp mixed into other foods."}},
-    {"name": "Cranberry", "slug": "cranberries", "category": "fruit", "allergen": null, "iron": 0, "bitter": true, "sweet": true, "min_age": 6,
-     "prep": {"6": "Cook until burst and smash. Very tart, good bitter-sour exposure.", "9": "Cooked and smashed."}},
-    {"name": "Lemon", "slug": "lemon", "category": "fruit", "allergen": null, "iron": 0, "bitter": true, "sweet": false, "min_age": 6,
-     "prep": {"6": "A squeeze over vegetables, or let her suck a wedge for the reaction.", "9": "Zest and juice in cooking."},
-     "note": "Sour exposure builds flavor tolerance. Acidic, expect mouth redness."},
-
-    {"name": "Beef", "slug": "beef", "category": "protein", "allergen": null, "iron": 2, "bitter": false, "min_age": 6,
-     "prep": {"6": "A finger-length strip of well-cooked steak to suck and gnaw, or ground beef pressed into strips.", "9": "Finely chopped or ground, moist."},
-     "aliases": ["steak"]},
-    {"name": "Lamb", "slug": "lamb", "category": "protein", "allergen": null, "iron": 2, "bitter": false, "min_age": 6,
-     "prep": {"6": "A rib bone with meat to gnaw, supervised, or ground lamb in strips.", "9": "Finely chopped, moist."}},
-    {"name": "Pork", "slug": "pork", "category": "protein", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Slow-cooked shredded pork, or a finger-length strip of tender loin.", "9": "Shredded or finely chopped."}},
-    {"name": "Chicken thigh", "slug": "chicken", "category": "protein", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "A whole drumstick with skin removed to gnaw, or shredded thigh in strips.", "9": "Shredded or finely chopped, kept moist."}},
-    {"name": "Turkey", "slug": "turkey", "category": "protein", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Ground turkey pressed into finger-length strips, kept moist.", "9": "Finely chopped, moist."}},
-    {"name": "Duck", "common": false, "slug": "duck", "category": "protein", "allergen": null, "iron": 2, "bitter": false, "min_age": 6,
-     "prep": {"6": "Shredded slow-cooked duck, skin removed.", "9": "Finely chopped."}},
-    {"name": "Chicken liver", "common": false, "slug": "liver", "category": "protein", "allergen": null, "iron": 2, "bitter": true, "min_age": 6,
-     "prep": {"6": "Cook and mash into a smooth pate, spread thinly on toast strips.", "9": "Pate spread on toast, or finely chopped."},
-     "note": "The single densest iron source available. Once a week is plenty, it is very high in vitamin A."},
-    {"name": "Egg", "slug": "egg", "category": "protein", "allergen": "egg", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Omelette cut into finger-length strips, or hard-boiled yolk mashed.", "9": "Scrambled in bite-size curds."},
-     "note": "Keep the whole egg in rotation, white and yolk. Always fully cooked."},
-    {"name": "Salmon", "slug": "salmon", "category": "protein", "allergen": "fish", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "A finger-length flake of cooked salmon, bones checked twice.", "9": "Flaked into bite-size pieces."}},
-    {"name": "Sardine", "slug": "sardines", "category": "protein", "allergen": "fish", "iron": 2, "bitter": false, "min_age": 6,
-     "prep": {"6": "Mash a whole tinned sardine onto toast strips.", "9": "Chopped or mashed on toast."},
-     "note": "Choose no-salt-added or rinse well. Excellent iron and omega-3."},
-    {"name": "Cod", "slug": "cod", "category": "protein", "allergen": "fish", "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "A finger-length flake of cooked cod, bones checked twice.", "9": "Flaked bite-size pieces."}},
-    {"name": "Trout", "common": false, "slug": "trout", "category": "protein", "allergen": "fish", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Flake cooked trout, bones checked twice.", "9": "Flaked bite-size pieces."}},
-    {"name": "Mackerel", "common": false, "slug": "mackerel", "category": "protein", "allergen": "fish", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Flake cooked Atlantic mackerel, bones removed.", "9": "Flaked bite-size pieces."},
-     "note": "Atlantic mackerel is low mercury. Avoid king mackerel."},
-    {"name": "Tuna", "slug": "tuna", "category": "protein", "allergen": "fish", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Mash tinned skipjack tuna with avocado, spread on toast strips.", "9": "Mashed or flaked."},
-     "note": "Use skipjack or canned light. Limit to about once a week for mercury."},
-    {"name": "Shrimp", "slug": "shrimp", "category": "protein", "allergen": "shellfish", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cook and mince finely, mix into a scoopable food. Rubbery whole.", "9": "Finely chopped cooked shrimp."},
-     "note": "Not yet introduced. Shellfish is the last of the nine common allergens still outstanding."},
-    {"name": "Crab", "common": false, "slug": "crab", "category": "protein", "allergen": "shellfish", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Flaked cooked crab meat mixed into avocado or potato.", "9": "Flaked bite-size pieces."}},
-    {"name": "Scallop", "common": false, "slug": "scallops", "category": "protein", "allergen": "shellfish", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cook and mince finely.", "9": "Finely chopped."}},
-    {"name": "Mussel", "common": false, "slug": "mussels", "category": "protein", "allergen": "shellfish", "iron": 2, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cook, remove from shell, mince finely.", "9": "Finely chopped."}},
-    {"name": "Clam", "common": false, "slug": "clams", "category": "protein", "allergen": "shellfish", "iron": 2, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cook and mince finely into a soft food.", "9": "Finely chopped."}},
-    {"name": "Oyster", "common": false, "slug": "oysters", "category": "protein", "allergen": "shellfish", "iron": 2, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cooked only, never raw, minced finely.", "9": "Cooked and finely chopped."},
-     "note": "Never raw."},
-
-    {"name": "Black beans", "slug": "black-beans", "category": "legume", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Smash cooked beans flat, or mix into a scoopable mash.", "9": "Lightly smashed whole beans."}},
-    {"name": "Chickpeas", "slug": "chickpeas", "category": "legume", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Smash flat or serve as hummus on toast strips.", "9": "Smashed whole chickpeas."},
-     "note": "Whole chickpeas are a choking risk. Smash until she chews well."},
-    {"name": "Lentils", "slug": "lentils", "category": "legume", "allergen": null, "iron": 2, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cook very soft and serve thick, scoopable or on toast.", "9": "Whole cooked lentils."}},
-    {"name": "Kidney beans", "slug": "kidney-beans", "category": "legume", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cook until very soft and smash.", "9": "Lightly smashed."}},
-    {"name": "White beans", "slug": "white-beans", "category": "legume", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Smash into a spread for toast strips.", "9": "Lightly smashed whole beans."}},
-    {"name": "Pinto beans", "slug": "pinto-beans", "category": "legume", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Smash, or serve as refried beans on toast.", "9": "Lightly smashed."}},
-    {"name": "Split peas", "common": false, "slug": "split-peas", "category": "legume", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cook into a thick scoopable dal.", "9": "Thick dal, or mixed into grains."}},
-    {"name": "Edamame", "slug": "edamame", "category": "legume", "allergen": "soy", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Shell, remove the skin, and smash flat.", "9": "Shelled and smashed."},
-     "note": "Whole edamame is a choking risk. Gave mild hives on 6/21, but tofu was fine on 7/14."},
-    {"name": "Tofu", "slug": "tofu", "category": "legume", "allergen": "soy", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Firm tofu in finger-length strips, seared for grip.", "9": "Bite-size cubes."}},
-    {"name": "Tempeh", "common": false, "slug": "tempeh", "category": "legume", "allergen": "soy", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Steam then sear, serve finger-length strips.", "9": "Bite-size pieces, kept moist."}},
-    {"name": "Hummus", "slug": "hummus", "category": "legume", "allergen": "sesame", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Spread thinly on toast strips or vegetable spears.", "9": "As a dip for soft vegetable sticks."},
-     "note": "Counts as sesame exposure via the tahini, and it is the easiest way to keep sesame in rotation."},
-
-    {"name": "Oats", "slug": "oats", "category": "grain", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Thick oatmeal she can scoop, or pressed into finger-length bars.", "9": "Thick oatmeal, or oat bars."}},
-    {"name": "Wheat bread", "slug": "bread", "category": "grain", "allergen": "wheat", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Lightly toasted, cut into finger-length strips, topped with a spread.", "9": "Toast strips or bite-size pieces."},
-     "note": "Toast rather than fresh bread, which can ball up in the mouth.",
-     "aliases": ["wheat", "bread", "toast"]},
-    {"name": "Pasta", "slug": "pasta", "category": "grain", "allergen": "wheat", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Large shapes cooked past al dente, like rigatoni or fusilli.", "9": "Bite-size shapes, well cooked."}},
-    {"name": "Couscous", "slug": "couscous", "category": "grain", "allergen": "wheat", "iron": 1, "bitter": false, "min_age": 9,
-     "prep": {"9": "Serve moist and clumped so she can scoop it, or mixed with vegetables."}},
-    {"name": "Farro", "common": false, "slug": "farro", "category": "grain", "allergen": "wheat", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cook well past done and serve in a moist clump.", "9": "Cooked soft, mixed into other foods."}},
-    {"name": "Quinoa", "slug": "quinoa", "category": "grain", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cook and serve in a moist clump she can scoop.", "9": "Mixed with soft vegetables."}},
-    {"name": "Rice", "slug": "rice", "category": "grain", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Sticky short-grain rice pressed into a soft ball.", "9": "Rice balls or loose sticky rice."},
-     "note": "Vary grains rather than serving rice daily, because of arsenic. Avoid rice cereal as a staple."},
-    {"name": "Barley", "slug": "barley", "category": "grain", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cook very soft and serve in a moist clump.", "9": "Cooked soft, mixed into stews."},
-     "note": "Contains gluten, though it is not the wheat allergen."},
-    {"name": "Rye", "common": false, "slug": "rye", "category": "grain", "allergen": null, "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "Toasted rye in finger-length strips with a spread.", "9": "Toast strips or pieces."},
-     "note": "Contains gluten. Pleasantly bitter."},
-    {"name": "Buckwheat", "common": false, "slug": "buckwheat", "category": "grain", "allergen": null, "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "Cook into a soft porridge, or make thin pancakes cut into strips.", "9": "Soft cooked groats or pancake pieces."}},
-    {"name": "Millet", "common": false, "slug": "millet", "category": "grain", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cook into a thick porridge.", "9": "Thick porridge or moist clumps."}},
-    {"name": "Amaranth", "common": false, "slug": "amaranth", "category": "grain", "allergen": null, "iron": 2, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cook into a thick porridge.", "9": "Thick porridge, mixed with fruit or vegetables."}},
-    {"name": "Teff", "common": false, "slug": "teff", "category": "grain", "allergen": null, "iron": 2, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cook into a thick porridge, or serve injera strips.", "9": "Porridge or injera pieces."}},
-    {"name": "Corn tortilla", "slug": "tortilla", "category": "grain", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Warm and cut into finger-length strips, softened with a spread.", "9": "Bite-size pieces."}},
-
-    {"name": "Yogurt", "slug": "yogurt", "category": "dairy", "allergen": "dairy", "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Full-fat plain, thick enough to stay on a preloaded spoon.", "9": "Full-fat plain, self-fed with a spoon."},
-     "note": "Plain and unsweetened. Add fruit yourself rather than buying flavored.",
-     "aliases": ["dairy", "greek yogurt", "yoghurt"]},
-    {"name": "Cheddar cheese", "slug": "cheese", "category": "dairy", "allergen": "dairy", "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Coarsely shredded, or a large thin strip to gnaw.", "9": "Shredded or small thin pieces."},
-     "note": "Choose lower-sodium cheeses. Cheese cubes are a choking risk, shred or slice thin."},
-    {"name": "Cottage cheese", "slug": "cottage-cheese", "category": "dairy", "allergen": "dairy", "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Full-fat, served on a preloaded spoon.", "9": "Self-fed with a spoon."}},
-    {"name": "Ricotta", "slug": "ricotta", "category": "dairy", "allergen": "dairy", "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Spread thickly on toast strips.", "9": "Spread on toast or mixed into pasta."}},
-    {"name": "Kefir", "slug": "kefir", "category": "dairy", "allergen": "dairy", "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Plain, thickened with oats or served in an open cup.", "9": "Plain, in an open or straw cup."}},
-    {"name": "Butter", "anchor": false, "slug": "butter", "category": "dairy", "allergen": "dairy", "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Thin spread on toast, or cook vegetables in it.", "9": "As a cooking fat or thin spread."}},
-
-    {"name": "Peanut butter", "slug": "peanut", "category": "nut_seed", "allergen": "peanut", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Thin with warm water to a runny consistency, spread thinly on toast.", "9": "Thin layer on toast, or stirred into oatmeal."},
-     "note": "Never a spoonful of thick peanut butter, it is a choking risk. Always thinned and spread thin."},
-    {"name": "Almond butter", "slug": "almond", "category": "nut_seed", "allergen": "tree_nut", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Thin with water, spread thinly on toast.", "9": "Thin layer on toast or in oatmeal."},
-     "aliases": ["almonds", "almond"]},
-    {"name": "Cashew butter", "slug": "cashew", "category": "nut_seed", "allergen": "tree_nut", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Thin with water, spread thinly, or stir into yogurt.", "9": "Thin layer on toast or in yogurt."},
-     "aliases": ["cashew", "cashews"]},
-    {"name": "Walnut", "slug": "walnut", "category": "nut_seed", "allergen": "tree_nut", "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "Grind to a fine flour and stir into oatmeal or yogurt.", "9": "Finely ground into other foods."},
-     "note": "Whole nuts and large pieces are a choking hazard until about 4 years. Always ground or as butter."},
-    {"name": "Pecan", "slug": "pecan", "category": "nut_seed", "allergen": "tree_nut", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Grind fine and stir into oatmeal.", "9": "Finely ground into other foods."},
-     "note": "Never whole. Grind or serve as a thin butter."},
-    {"name": "Pistachio", "slug": "pistachio", "category": "nut_seed", "allergen": "tree_nut", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Grind fine and stir into yogurt or oatmeal.", "9": "Finely ground into other foods."},
-     "note": "Never whole. Face splotches were noted on 7/17, worth a careful re-offer."},
-    {"name": "Hazelnut", "slug": "hazelnut", "category": "nut_seed", "allergen": "tree_nut", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Grind fine into oatmeal, or a thin layer of hazelnut butter.", "9": "Ground, or thin butter on toast."},
-     "note": "Never whole."},
-    {"name": "Brazil nut", "common": false, "slug": "brazil-nut", "category": "nut_seed", "allergen": "tree_nut", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Grind fine into other foods.", "9": "Finely ground."},
-     "note": "Never whole. Very high in selenium, so once a week at most."},
-    {"name": "Macadamia", "common": false, "slug": "macadamia-nut", "category": "nut_seed", "allergen": "tree_nut", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Grind fine, or thin macadamia butter on toast.", "9": "Ground or as thin butter."},
-     "note": "Never whole."},
-    {"name": "Tahini", "slug": "sesame", "category": "nut_seed", "allergen": "sesame", "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "Thin with water and spread thinly on toast, or stir into vegetables.", "9": "Thin layer on toast, or drizzled over vegetables."},
-     "note": "Thin it out. Thick tahini is as sticky as thick nut butter."},
-    {"name": "Sesame seeds", "slug": "sesame", "category": "nut_seed", "allergen": "sesame", "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Sprinkle ground seeds over other foods, or use as a grip coating.", "9": "Sprinkled whole or ground."}},
-    {"name": "Chia seeds", "slug": "chia-seeds", "category": "nut_seed", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Soak into a pudding or stir into oatmeal.", "9": "Soaked into porridge or yogurt."},
-     "note": "Always soaked, never dry."},
-    {"name": "Hemp seeds", "slug": "hemp-seeds", "category": "nut_seed", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Sprinkle over yogurt, oatmeal, or vegetables.", "9": "Sprinkled over other foods."}},
-    {"name": "Flax seeds", "slug": "flax", "category": "nut_seed", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Ground only, stirred into oatmeal or yogurt.", "9": "Ground, stirred into other foods."},
-     "note": "Whole flax passes through undigested. Always ground."},
-    {"name": "Sunflower seed butter", "slug": "sunflower-seed", "category": "nut_seed", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Thin with water and spread thinly on toast.", "9": "Thin layer on toast."}},
-    {"name": "Pumpkin seed butter", "slug": "pumpkin-seed", "category": "nut_seed", "allergen": null, "iron": 2, "bitter": false, "min_age": 6,
-     "prep": {"6": "Thin with water, spread thinly on toast or stir into oatmeal.", "9": "Thin layer on toast."},
-     "note": "One of the better plant iron sources."},
-    {"name": "Coconut", "slug": "coconut", "category": "nut_seed", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "Full-fat coconut milk stirred into porridge, or finely shredded.", "9": "Coconut milk in cooking, or finely shredded."}},
-
-    {"name": "Olive oil", "slug": "olive-oil", "category": "other", "allergen": null, "iron": 0, "bitter": true, "min_age": 6,
-     "prep": {"6": "Cook vegetables in it, or drizzle over finished food.", "9": "As a cooking fat or finishing drizzle."}},
-    {"name": "Avocado oil", "slug": "avocado-oil", "category": "other", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "As a cooking fat.", "9": "As a cooking fat."}},
-    {"name": "Honey", "slug": "honey", "category": "other", "allergen": null, "iron": 0, "bitter": false, "min_age": 12,
-     "prep": {"12": "Only after her first birthday."},
-     "note": "Never before 12 months, because of infant botulism risk. This includes baked goods containing honey."},
-
-    {"name": "Basil", "slug": "basil", "category": "flavor", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Chop finely into vegetables, eggs, or pasta.", "9": "Chopped into other foods."}},
-    {"name": "Cilantro", "slug": "cilantro", "category": "flavor", "allergen": null, "iron": 0, "bitter": true, "min_age": 6,
-     "prep": {"6": "Chop finely and stir through beans, rice, or vegetables.", "9": "Chopped into other foods."}},
-    {"name": "Mint", "slug": "mint", "category": "flavor", "allergen": null, "iron": 0, "bitter": true, "min_age": 6,
-     "prep": {"6": "Chop finely into yogurt, peas, or fruit.", "9": "Chopped into other foods."}},
-    {"name": "Dill", "slug": "dill", "category": "flavor", "allergen": null, "iron": 0, "bitter": true, "min_age": 6,
-     "prep": {"6": "Chop finely into fish, yogurt, or potatoes.", "9": "Chopped into other foods."}},
-    {"name": "Parsley", "slug": "parsley", "category": "flavor", "allergen": null, "iron": 0, "bitter": true, "min_age": 6,
-     "prep": {"6": "Chop finely into grains or vegetables.", "9": "Chopped into other foods."}},
-    {"name": "Garlic", "slug": "garlic", "category": "flavor", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "Cook into vegetables and proteins.", "9": "Cooked into other foods."}},
-    {"name": "Ginger", "slug": "ginger", "category": "flavor", "allergen": null, "iron": 0, "bitter": true, "min_age": 6,
-     "prep": {"6": "Grate a small amount into cooked dishes.", "9": "Grated into cooked dishes."}},
-    {"name": "Turmeric", "slug": "turmeric", "category": "flavor", "allergen": null, "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "A pinch stirred into lentils, rice, or vegetables.", "9": "A pinch in cooked dishes."},
-     "note": "Stains everything permanently. Wear the bad shirt."},
-    {"name": "Cumin", "slug": "cumin", "category": "flavor", "allergen": null, "iron": 1, "bitter": true, "min_age": 6,
-     "prep": {"6": "A pinch in beans, lentils, or roasted vegetables.", "9": "A pinch in cooked dishes."}},
-    {"name": "Cinnamon", "slug": "cinnamon", "category": "flavor", "allergen": null, "iron": 0, "bitter": false, "min_age": 6,
-     "prep": {"6": "A pinch in oatmeal or over roasted squash.", "9": "A pinch in porridge or fruit."}},
-    {"name": "Paprika", "slug": "paprika", "category": "flavor", "allergen": null, "iron": 1, "bitter": false, "min_age": 6,
-     "prep": {"6": "A pinch of sweet, not hot, paprika in cooked dishes.", "9": "A pinch in cooked dishes."}},
-    {"name": "Black pepper", "slug": "black-pepper", "category": "flavor", "allergen": null, "iron": 0, "bitter": true, "min_age": 6,
-     "prep": {"6": "A small grind over cooked food.", "9": "A small grind over cooked food."}}
-  ]
+  {
+   "name": "Cauliflower",
+   "slug": "cauliflower",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Steam a large floret with the stem as a handle.",
+    "9": "Roast and cut into bite-size pieces."
+   },
+   "vitamin_c": 2
+  },
+  {
+   "name": "Spinach",
+   "slug": "spinach",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook and blend into another food, or serve large wilted leaves.",
+    "9": "Finely chop cooked spinach and mix in."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Kale",
+   "slug": "kale",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Steam whole large leaves until very soft, stems removed.",
+    "9": "Chop cooked kale finely and mix into grains."
+   },
+   "vitamin_c": 2
+  },
+  {
+   "name": "Asparagus",
+   "slug": "asparagus",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Steam whole spears until floppy, serve one at a time.",
+    "9": "Cut cooked spears into short bite-size pieces."
+   },
+   "aliases": [
+    "aspargus"
+   ],
+   "vitamin_c": 1
+  },
+  {
+   "name": "Brussels sprouts",
+   "slug": "brussels-sprouts",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Halve and roast until very soft, serve the half.",
+    "9": "Quarter roasted sprouts."
+   },
+   "vitamin_c": 2
+  },
+  {
+   "name": "Cabbage",
+   "slug": "cabbage",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Braise wedges until silky, serve a large soft strip.",
+    "9": "Chop braised cabbage into short ribbons."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Bok choy",
+   "slug": "bok-choy",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Steam a whole small head, serve a soft leafy stalk.",
+    "9": "Chop cooked bok choy small."
+   },
+   "vitamin_c": 2
+  },
+  {
+   "name": "Swiss chard",
+   "slug": "swiss-chard",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Wilt whole leaves, serve one leaf at a time.",
+    "9": "Finely chop cooked leaves and stems."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Broccoli rabe",
+   "common": false,
+   "slug": "broccoli-rabe",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Braise until very soft, serve a whole stalk. Strongly bitter, expect faces.",
+    "9": "Chop braised rabe into bite-size pieces."
+   }
+  },
+  {
+   "name": "Collard greens",
+   "slug": "collard-greens",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Braise whole leaves until very soft.",
+    "9": "Chop braised collards finely."
+   },
+   "vitamin_c": 2
+  },
+  {
+   "name": "Arugula",
+   "slug": "arugula",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Wilt into eggs or pasta rather than serving raw.",
+    "9": "Chop and mix through soft foods."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Eggplant",
+   "slug": "eggplant",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Roast until collapsing, serve a finger-length strip with skin off.",
+    "9": "Cut roasted eggplant into bite-size cubes."
+   }
+  },
+  {
+   "name": "Radish",
+   "slug": "radish",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 9,
+   "prep": {
+    "9": "Roast or braise until soft, quarter. Raw is too hard and peppery."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Artichoke",
+   "common": false,
+   "slug": "artichoke",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Steam whole, let her scrape a soft leaf. Serve the heart mashed.",
+    "9": "Serve soft heart in bite-size pieces."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Turnip",
+   "slug": "turnip",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Roast finger-length wedges until soft.",
+    "9": "Cube roasted turnip."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Rutabaga",
+   "common": false,
+   "slug": "rutabaga",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Roast in finger-length wedges until soft.",
+    "9": "Cube roasted rutabaga."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Watercress",
+   "common": false,
+   "slug": "watercress",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 1,
+   "bitter": true,
+   "min_age": 9,
+   "prep": {
+    "9": "Wilt into soups or eggs, chopped fine."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Endive",
+   "common": false,
+   "slug": "endive",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 9,
+   "prep": {
+    "9": "Braise until soft and serve short ribbons. Very bitter."
+   }
+  },
+  {
+   "name": "Zucchini",
+   "slug": "zucchini",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Roast finger-length spears, skin on for grip.",
+    "9": "Cut cooked zucchini into bite-size pieces."
+   }
+  },
+  {
+   "name": "Cucumber",
+   "slug": "cucumber",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Peel and serve a large finger-length spear, seeds removed. Great when teething.",
+    "9": "Peeled bite-size pieces."
+   }
+  },
+  {
+   "name": "Carrot",
+   "slug": "carrot",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Steam or roast finger-length sticks until they squish easily.",
+    "9": "Cooked carrot in bite-size pieces."
+   },
+   "note": "Keep carrot cooked-soft. Raw sticks and raw rounds are a choking risk until about 4 years."
+  },
+  {
+   "name": "Sweet potato",
+   "slug": "sweet-potato",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Roast finger-length wedges, skin on for grip.",
+    "9": "Cube roasted sweet potato."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Butternut squash",
+   "slug": "butternut-squash",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Roast finger-length wedges until very soft.",
+    "9": "Cube roasted squash."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Acorn squash",
+   "slug": "acorn-squash",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Roast a wedge, let her scoop the flesh.",
+    "9": "Cube the soft flesh."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Pumpkin",
+   "slug": "pumpkin",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Roast finger-length wedges.",
+    "9": "Cube roasted pumpkin."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Green beans",
+   "slug": "green-beans",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Steam whole beans until floppy, serve one at a time.",
+    "9": "Cut cooked beans into short pieces."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Peas",
+   "slug": "peas",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Smash cooked peas and mix into a scoopable food.",
+    "9": "Whole cooked peas, lightly smashed."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Snap peas",
+   "slug": "sugar-snap-peas",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Steam whole pods until soft.",
+    "9": "Chop cooked pods into short pieces."
+   },
+   "vitamin_c": 2
+  },
+  {
+   "name": "Beets",
+   "slug": "beets",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Roast finger-length wedges.",
+    "9": "Cube roasted beets."
+   },
+   "note": "Turns diapers red. Not blood."
+  },
+  {
+   "name": "Parsnip",
+   "slug": "parsnip",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Roast finger-length spears until soft.",
+    "9": "Cube roasted parsnip."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Bell pepper",
+   "slug": "bell-pepper",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Roast until skin slips off, serve a soft finger-length strip.",
+    "9": "Bite-size pieces of roasted pepper."
+   },
+   "vitamin_c": 2
+  },
+  {
+   "name": "Tomato",
+   "slug": "tomato",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Serve a large soft wedge of ripe tomato, or cooked and crushed.",
+    "9": "Quartered cherry tomatoes, never whole."
+   },
+   "note": "Acidic. A red rash right around the mouth is usually contact irritation, not allergy.",
+   "vitamin_c": 1
+  },
+  {
+   "name": "Cherry tomato",
+   "slug": "tomato",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 9,
+   "prep": {
+    "9": "Quarter lengthwise. Never serve whole or halved."
+   },
+   "note": "Whole cherry tomatoes are a serious choking hazard until about 4 years.",
+   "vitamin_c": 1
+  },
+  {
+   "name": "Corn",
+   "slug": "corn",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Serve a short section of cooked cob to gnaw, supervised.",
+    "9": "Loose cooked kernels, lightly smashed."
+   }
+  },
+  {
+   "name": "Celery",
+   "slug": "celery",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 9,
+   "prep": {
+    "9": "Cook until very soft and chop fine. Raw celery strings are a choking risk."
+   }
+  },
+  {
+   "name": "Leek",
+   "slug": "leek",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Braise until silky, serve soft rings or blend into soup.",
+    "9": "Chop braised leek small."
+   }
+  },
+  {
+   "name": "Onion",
+   "slug": "onion",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook until sweet and soft, mixed into other foods.",
+    "9": "Finely chopped cooked onion."
+   }
+  },
+  {
+   "name": "Mushroom",
+   "slug": "mushrooms",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Saute until very soft and chop fine. Rubbery texture, chop small.",
+    "9": "Finely chopped cooked mushroom."
+   }
+  },
+  {
+   "name": "Okra",
+   "common": false,
+   "slug": "okra",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Roast whole pods until soft.",
+    "9": "Cut cooked okra into short pieces."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Fennel",
+   "slug": "fennel",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Braise wedges until soft. Mild licorice flavor, good variety.",
+    "9": "Chop braised fennel."
+   }
+  },
+  {
+   "name": "Potato",
+   "slug": "potato",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Roast finger-length wedges, or serve mashed.",
+    "9": "Cube roasted potato."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Yellow squash",
+   "slug": "summer-squash",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Roast finger-length spears.",
+    "9": "Bite-size cooked pieces."
+   }
+  },
+  {
+   "name": "Napa cabbage",
+   "slug": "cabbage",
+   "category": "vegetable",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Braise leaves until very soft.",
+    "9": "Chop cooked leaves into ribbons."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Avocado",
+   "slug": "avocado",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Finger-length spears of ripe avocado, rolled in fine crumbs for grip.",
+    "9": "Bite-size cubes."
+   }
+  },
+  {
+   "name": "Banana",
+   "slug": "banana",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Half a peeled banana with a strip of peel left as a handle.",
+    "9": "Bite-size pieces, rolled in crumbs if slippery."
+   }
+  },
+  {
+   "name": "Apple",
+   "slug": "apple",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook until soft, or serve a large whole peeled piece to gnaw.",
+    "9": "Grated raw apple, or soft cooked pieces."
+   },
+   "note": "Raw apple chunks and slices are a choking hazard. Cook or grate until about 2 years."
+  },
+  {
+   "name": "Pear",
+   "slug": "pear",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Very ripe, peeled, in finger-length spears.",
+    "9": "Bite-size pieces of ripe pear."
+   }
+  },
+  {
+   "name": "Mango",
+   "slug": "mango",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Large peeled spear of ripe mango, or the pit to gnaw.",
+    "9": "Bite-size cubes."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Watermelon",
+   "slug": "watermelon",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Finger-length seedless spears.",
+    "9": "Bite-size cubes."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Cantaloupe",
+   "slug": "cantaloupe",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Ripe finger-length spears.",
+    "9": "Bite-size cubes."
+   },
+   "aliases": [
+    "cantelope",
+    "canteloupe"
+   ],
+   "vitamin_c": 1
+  },
+  {
+   "name": "Honeydew",
+   "slug": "honeydew",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Ripe finger-length spears.",
+    "9": "Bite-size cubes."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Blueberry",
+   "slug": "blueberries",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Smash flat, or serve cooked and burst.",
+    "9": "Smashed or quartered."
+   },
+   "note": "Whole blueberries are a choking hazard. Smash until she has a confident pincer grasp."
+  },
+  {
+   "name": "Strawberry",
+   "slug": "strawberries",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "A whole large hulled strawberry to gnaw, or smashed.",
+    "9": "Quartered lengthwise."
+   },
+   "note": "Acidic. Rash right around the mouth is commonly contact irritation.",
+   "vitamin_c": 2
+  },
+  {
+   "name": "Raspberry",
+   "slug": "raspberries",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Serve whole, they collapse easily, or smash into yogurt.",
+    "9": "Whole or halved."
+   },
+   "note": "Acidic. Perioral rash is commonly contact irritation rather than true allergy.",
+   "vitamin_c": 1
+  },
+  {
+   "name": "Blackberry",
+   "slug": "blackberries",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Smash, the seeds and shape make whole ones tricky.",
+    "9": "Halved."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Peach",
+   "slug": "peaches",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Very ripe, peeled, large spear or half with pit removed.",
+    "9": "Bite-size pieces."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Plum",
+   "slug": "plums",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Ripe, pitted, halved with skin removed.",
+    "9": "Bite-size pieces, skin removed."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Nectarine",
+   "slug": "nectarines",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Ripe, pitted half, skin removed.",
+    "9": "Bite-size pieces."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Apricot",
+   "slug": "apricots",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Ripe, pitted half.",
+    "9": "Bite-size pieces."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Orange",
+   "slug": "oranges",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "A large segment with membrane removed, supervised.",
+    "9": "Small pieces, membrane and seeds removed."
+   },
+   "note": "Acidic, commonly causes harmless perioral redness.",
+   "vitamin_c": 2
+  },
+  {
+   "name": "Clementine",
+   "slug": "clementine",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Peeled segment, membrane removed.",
+    "9": "Halved segments."
+   },
+   "vitamin_c": 2
+  },
+  {
+   "name": "Grapefruit",
+   "slug": "grapefruit",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Segment with membrane removed. Pleasantly bitter, good exposure.",
+    "9": "Small pieces."
+   },
+   "vitamin_c": 2
+  },
+  {
+   "name": "Kiwi",
+   "slug": "kiwi",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Peeled half or a large spear of ripe kiwi.",
+    "9": "Bite-size pieces."
+   },
+   "vitamin_c": 2
+  },
+  {
+   "name": "Pineapple",
+   "slug": "pineapple",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Ripe finger-length spear, core removed.",
+    "9": "Bite-size pieces."
+   },
+   "note": "Very acidic. Expect harmless mouth redness.",
+   "vitamin_c": 1
+  },
+  {
+   "name": "Papaya",
+   "slug": "papaya",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Ripe finger-length spear, seeds removed.",
+    "9": "Bite-size cubes."
+   },
+   "vitamin_c": 2
+  },
+  {
+   "name": "Grape",
+   "slug": "grapes",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Smash flat or quarter lengthwise. Never whole.",
+    "9": "Quartered lengthwise."
+   },
+   "note": "Whole and halved grapes are one of the top choking hazards. Quarter lengthwise until about 4 years."
+  },
+  {
+   "name": "Cherry",
+   "slug": "cherries",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Pit and smash.",
+    "9": "Pitted and quartered."
+   },
+   "note": "Always remove the pit."
+  },
+  {
+   "name": "Fig",
+   "slug": "figs",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Ripe fresh fig, halved, flesh scooped.",
+    "9": "Bite-size pieces of fresh fig."
+   }
+  },
+  {
+   "name": "Dragon fruit",
+   "common": false,
+   "slug": "dragon-fruit",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Finger-length spears of peeled flesh.",
+    "9": "Bite-size cubes."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Persimmon",
+   "common": false,
+   "slug": "persimmon",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Very ripe only, peeled spear.",
+    "9": "Bite-size pieces of ripe persimmon."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Pomegranate",
+   "slug": "pomegranate",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 9,
+   "prep": {
+    "9": "Smash the arils, or mix into yogurt. Seeds are hard."
+   }
+  },
+  {
+   "name": "Prune",
+   "slug": "prunes",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Stew until very soft and mash, or serve a large soft piece.",
+    "9": "Chopped stewed prune."
+   },
+   "note": "Useful when she is constipated."
+  },
+  {
+   "name": "Date",
+   "slug": "dates",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Pit and mash into a paste, thin with water.",
+    "9": "Finely chopped, pitted."
+   },
+   "note": "Sticky and dense. Always pit and mash or chop small."
+  },
+  {
+   "name": "Jackfruit",
+   "common": false,
+   "slug": "jackfruit",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Ripe pod flesh, seed removed, served as a soft strip.",
+    "9": "Bite-size pieces."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Guava",
+   "common": false,
+   "slug": "guava",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Ripe, seeds removed, soft spear.",
+    "9": "Bite-size pieces, seeds removed."
+   },
+   "vitamin_c": 2
+  },
+  {
+   "name": "Lychee",
+   "common": false,
+   "slug": "lychee",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Peel, pit, and smash.",
+    "9": "Peeled, pitted, quartered."
+   },
+   "note": "Slippery and round. Always pit and cut.",
+   "vitamin_c": 1
+  },
+  {
+   "name": "Passion fruit",
+   "common": false,
+   "slug": "passion-fruit",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Stir the pulp into yogurt or oatmeal.",
+    "9": "Pulp mixed into other foods."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Cranberry",
+   "slug": "cranberries",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "sweet": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook until burst and smash. Very tart, good bitter-sour exposure.",
+    "9": "Cooked and smashed."
+   },
+   "vitamin_c": 1
+  },
+  {
+   "name": "Lemon",
+   "slug": "lemon",
+   "category": "fruit",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "sweet": false,
+   "min_age": 6,
+   "prep": {
+    "6": "A squeeze over vegetables, or let her suck a wedge for the reaction.",
+    "9": "Zest and juice in cooking."
+   },
+   "note": "Sour exposure builds flavor tolerance. Acidic, expect mouth redness.",
+   "vitamin_c": 1
+  },
+  {
+   "name": "Beef",
+   "slug": "beef",
+   "category": "protein",
+   "allergen": null,
+   "iron": 2,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "A finger-length strip of well-cooked steak to suck and gnaw, or ground beef pressed into strips.",
+    "9": "Finely chopped or ground, moist."
+   },
+   "aliases": [
+    "steak"
+   ]
+  },
+  {
+   "name": "Lamb",
+   "slug": "lamb",
+   "category": "protein",
+   "allergen": null,
+   "iron": 2,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "A rib bone with meat to gnaw, supervised, or ground lamb in strips.",
+    "9": "Finely chopped, moist."
+   }
+  },
+  {
+   "name": "Pork",
+   "slug": "pork",
+   "category": "protein",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Slow-cooked shredded pork, or a finger-length strip of tender loin.",
+    "9": "Shredded or finely chopped."
+   }
+  },
+  {
+   "name": "Chicken thigh",
+   "slug": "chicken",
+   "category": "protein",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "A whole drumstick with skin removed to gnaw, or shredded thigh in strips.",
+    "9": "Shredded or finely chopped, kept moist."
+   }
+  },
+  {
+   "name": "Turkey",
+   "slug": "turkey",
+   "category": "protein",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Ground turkey pressed into finger-length strips, kept moist.",
+    "9": "Finely chopped, moist."
+   }
+  },
+  {
+   "name": "Duck",
+   "common": false,
+   "slug": "duck",
+   "category": "protein",
+   "allergen": null,
+   "iron": 2,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Shredded slow-cooked duck, skin removed.",
+    "9": "Finely chopped."
+   }
+  },
+  {
+   "name": "Chicken liver",
+   "common": false,
+   "slug": "liver",
+   "category": "protein",
+   "allergen": null,
+   "iron": 2,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook and mash into a smooth pate, spread thinly on toast strips.",
+    "9": "Pate spread on toast, or finely chopped."
+   },
+   "note": "The single densest iron source available. Once a week is plenty, it is very high in vitamin A."
+  },
+  {
+   "name": "Egg",
+   "slug": "egg",
+   "category": "protein",
+   "allergen": "egg",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Omelette cut into finger-length strips, or hard-boiled yolk mashed.",
+    "9": "Scrambled in bite-size curds."
+   },
+   "note": "Keep the whole egg in rotation, white and yolk. Always fully cooked."
+  },
+  {
+   "name": "Salmon",
+   "slug": "salmon",
+   "category": "protein",
+   "allergen": "fish",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "A finger-length flake of cooked salmon, bones checked twice.",
+    "9": "Flaked into bite-size pieces."
+   }
+  },
+  {
+   "name": "Sardine",
+   "slug": "sardines",
+   "category": "protein",
+   "allergen": "fish",
+   "iron": 2,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Mash a whole tinned sardine onto toast strips.",
+    "9": "Chopped or mashed on toast."
+   },
+   "note": "Choose no-salt-added or rinse well. Excellent iron and omega-3."
+  },
+  {
+   "name": "Cod",
+   "slug": "cod",
+   "category": "protein",
+   "allergen": "fish",
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "A finger-length flake of cooked cod, bones checked twice.",
+    "9": "Flaked bite-size pieces."
+   }
+  },
+  {
+   "name": "Trout",
+   "common": false,
+   "slug": "trout",
+   "category": "protein",
+   "allergen": "fish",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Flake cooked trout, bones checked twice.",
+    "9": "Flaked bite-size pieces."
+   }
+  },
+  {
+   "name": "Mackerel",
+   "common": false,
+   "slug": "mackerel",
+   "category": "protein",
+   "allergen": "fish",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Flake cooked Atlantic mackerel, bones removed.",
+    "9": "Flaked bite-size pieces."
+   },
+   "note": "Atlantic mackerel is low mercury. Avoid king mackerel."
+  },
+  {
+   "name": "Tuna",
+   "slug": "tuna",
+   "category": "protein",
+   "allergen": "fish",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Mash tinned skipjack tuna with avocado, spread on toast strips.",
+    "9": "Mashed or flaked."
+   },
+   "note": "Use skipjack or canned light. Limit to about once a week for mercury."
+  },
+  {
+   "name": "Shrimp",
+   "slug": "shrimp",
+   "category": "protein",
+   "allergen": "shellfish",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook and mince finely, mix into a scoopable food. Rubbery whole.",
+    "9": "Finely chopped cooked shrimp."
+   },
+   "note": "Often the easiest first shellfish to buy and to mince finely."
+  },
+  {
+   "name": "Crab",
+   "common": false,
+   "slug": "crab",
+   "category": "protein",
+   "allergen": "shellfish",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Flaked cooked crab meat mixed into avocado or potato.",
+    "9": "Flaked bite-size pieces."
+   }
+  },
+  {
+   "name": "Scallop",
+   "common": false,
+   "slug": "scallops",
+   "category": "protein",
+   "allergen": "shellfish",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook and mince finely.",
+    "9": "Finely chopped."
+   }
+  },
+  {
+   "name": "Mussel",
+   "common": false,
+   "slug": "mussels",
+   "category": "protein",
+   "allergen": "shellfish",
+   "iron": 2,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook, remove from shell, mince finely.",
+    "9": "Finely chopped."
+   }
+  },
+  {
+   "name": "Clam",
+   "common": false,
+   "slug": "clams",
+   "category": "protein",
+   "allergen": "shellfish",
+   "iron": 2,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook and mince finely into a soft food.",
+    "9": "Finely chopped."
+   }
+  },
+  {
+   "name": "Oyster",
+   "common": false,
+   "slug": "oysters",
+   "category": "protein",
+   "allergen": "shellfish",
+   "iron": 2,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cooked only, never raw, minced finely.",
+    "9": "Cooked and finely chopped."
+   },
+   "note": "Never raw."
+  },
+  {
+   "name": "Black beans",
+   "slug": "black-beans",
+   "category": "legume",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Smash cooked beans flat, or mix into a scoopable mash.",
+    "9": "Lightly smashed whole beans."
+   }
+  },
+  {
+   "name": "Chickpeas",
+   "slug": "chickpeas",
+   "category": "legume",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Smash flat or serve as hummus on toast strips.",
+    "9": "Smashed whole chickpeas."
+   },
+   "note": "Whole chickpeas are a choking risk. Smash until she chews well."
+  },
+  {
+   "name": "Lentils",
+   "slug": "lentils",
+   "category": "legume",
+   "allergen": null,
+   "iron": 2,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook very soft and serve thick, scoopable or on toast.",
+    "9": "Whole cooked lentils."
+   }
+  },
+  {
+   "name": "Kidney beans",
+   "slug": "kidney-beans",
+   "category": "legume",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook until very soft and smash.",
+    "9": "Lightly smashed."
+   }
+  },
+  {
+   "name": "White beans",
+   "slug": "white-beans",
+   "category": "legume",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Smash into a spread for toast strips.",
+    "9": "Lightly smashed whole beans."
+   }
+  },
+  {
+   "name": "Pinto beans",
+   "slug": "pinto-beans",
+   "category": "legume",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Smash, or serve as refried beans on toast.",
+    "9": "Lightly smashed."
+   }
+  },
+  {
+   "name": "Split peas",
+   "common": false,
+   "slug": "split-peas",
+   "category": "legume",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook into a thick scoopable dal.",
+    "9": "Thick dal, or mixed into grains."
+   }
+  },
+  {
+   "name": "Edamame",
+   "slug": "edamame",
+   "category": "legume",
+   "allergen": "soy",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Shell, remove the skin, and smash flat.",
+    "9": "Shelled and smashed."
+   },
+   "note": "Whole edamame is a choking risk. Shell it and flatten each bean."
+  },
+  {
+   "name": "Tofu",
+   "slug": "tofu",
+   "category": "legume",
+   "allergen": "soy",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Firm tofu in finger-length strips, seared for grip.",
+    "9": "Bite-size cubes."
+   }
+  },
+  {
+   "name": "Tempeh",
+   "common": false,
+   "slug": "tempeh",
+   "category": "legume",
+   "allergen": "soy",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Steam then sear, serve finger-length strips.",
+    "9": "Bite-size pieces, kept moist."
+   }
+  },
+  {
+   "name": "Hummus",
+   "slug": "hummus",
+   "category": "legume",
+   "allergen": "sesame",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Spread thinly on toast strips or vegetable spears.",
+    "9": "As a dip for soft vegetable sticks."
+   },
+   "note": "Counts as sesame exposure via the tahini, and it is the easiest way to keep sesame in rotation."
+  },
+  {
+   "name": "Oats",
+   "slug": "oats",
+   "category": "grain",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Thick oatmeal she can scoop, or pressed into finger-length bars.",
+    "9": "Thick oatmeal, or oat bars."
+   }
+  },
+  {
+   "name": "Wheat bread",
+   "slug": "bread",
+   "category": "grain",
+   "allergen": "wheat",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Lightly toasted, cut into finger-length strips, topped with a spread.",
+    "9": "Toast strips or bite-size pieces."
+   },
+   "note": "Toast rather than fresh bread, which can ball up in the mouth.",
+   "aliases": [
+    "wheat",
+    "bread",
+    "toast"
+   ]
+  },
+  {
+   "name": "Pasta",
+   "slug": "pasta",
+   "category": "grain",
+   "allergen": "wheat",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Large shapes cooked past al dente, like rigatoni or fusilli.",
+    "9": "Bite-size shapes, well cooked."
+   }
+  },
+  {
+   "name": "Couscous",
+   "slug": "couscous",
+   "category": "grain",
+   "allergen": "wheat",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 9,
+   "prep": {
+    "9": "Serve moist and clumped so she can scoop it, or mixed with vegetables."
+   }
+  },
+  {
+   "name": "Farro",
+   "common": false,
+   "slug": "farro",
+   "category": "grain",
+   "allergen": "wheat",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook well past done and serve in a moist clump.",
+    "9": "Cooked soft, mixed into other foods."
+   }
+  },
+  {
+   "name": "Quinoa",
+   "slug": "quinoa",
+   "category": "grain",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook and serve in a moist clump she can scoop.",
+    "9": "Mixed with soft vegetables."
+   }
+  },
+  {
+   "name": "Rice",
+   "slug": "rice",
+   "category": "grain",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Sticky short-grain rice pressed into a soft ball.",
+    "9": "Rice balls or loose sticky rice."
+   },
+   "note": "Vary grains rather than serving rice daily, because of arsenic. Avoid rice cereal as a staple."
+  },
+  {
+   "name": "Barley",
+   "slug": "barley",
+   "category": "grain",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook very soft and serve in a moist clump.",
+    "9": "Cooked soft, mixed into stews."
+   },
+   "note": "Contains gluten, though it is not the wheat allergen."
+  },
+  {
+   "name": "Rye",
+   "common": false,
+   "slug": "rye",
+   "category": "grain",
+   "allergen": null,
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Toasted rye in finger-length strips with a spread.",
+    "9": "Toast strips or pieces."
+   },
+   "note": "Contains gluten. Pleasantly bitter."
+  },
+  {
+   "name": "Buckwheat",
+   "common": false,
+   "slug": "buckwheat",
+   "category": "grain",
+   "allergen": null,
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook into a soft porridge, or make thin pancakes cut into strips.",
+    "9": "Soft cooked groats or pancake pieces."
+   }
+  },
+  {
+   "name": "Millet",
+   "common": false,
+   "slug": "millet",
+   "category": "grain",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook into a thick porridge.",
+    "9": "Thick porridge or moist clumps."
+   }
+  },
+  {
+   "name": "Amaranth",
+   "common": false,
+   "slug": "amaranth",
+   "category": "grain",
+   "allergen": null,
+   "iron": 2,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook into a thick porridge.",
+    "9": "Thick porridge, mixed with fruit or vegetables."
+   }
+  },
+  {
+   "name": "Teff",
+   "common": false,
+   "slug": "teff",
+   "category": "grain",
+   "allergen": null,
+   "iron": 2,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook into a thick porridge, or serve injera strips.",
+    "9": "Porridge or injera pieces."
+   }
+  },
+  {
+   "name": "Corn tortilla",
+   "slug": "tortilla",
+   "category": "grain",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Warm and cut into finger-length strips, softened with a spread.",
+    "9": "Bite-size pieces."
+   }
+  },
+  {
+   "name": "Yogurt",
+   "slug": "yogurt",
+   "category": "dairy",
+   "allergen": "dairy",
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Full-fat plain, thick enough to stay on a preloaded spoon.",
+    "9": "Full-fat plain, self-fed with a spoon."
+   },
+   "note": "Plain and unsweetened. Add fruit yourself rather than buying flavored.",
+   "aliases": [
+    "dairy",
+    "greek yogurt",
+    "yoghurt"
+   ]
+  },
+  {
+   "name": "Cheddar cheese",
+   "slug": "cheese",
+   "category": "dairy",
+   "allergen": "dairy",
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Coarsely shredded, or a large thin strip to gnaw.",
+    "9": "Shredded or small thin pieces."
+   },
+   "note": "Choose lower-sodium cheeses. Cheese cubes are a choking risk, shred or slice thin."
+  },
+  {
+   "name": "Cottage cheese",
+   "slug": "cottage-cheese",
+   "category": "dairy",
+   "allergen": "dairy",
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Full-fat, served on a preloaded spoon.",
+    "9": "Self-fed with a spoon."
+   }
+  },
+  {
+   "name": "Ricotta",
+   "slug": "ricotta",
+   "category": "dairy",
+   "allergen": "dairy",
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Spread thickly on toast strips.",
+    "9": "Spread on toast or mixed into pasta."
+   }
+  },
+  {
+   "name": "Kefir",
+   "slug": "kefir",
+   "category": "dairy",
+   "allergen": "dairy",
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Plain, thickened with oats or served in an open cup.",
+    "9": "Plain, in an open or straw cup."
+   }
+  },
+  {
+   "name": "Butter",
+   "anchor": false,
+   "slug": "butter",
+   "category": "dairy",
+   "allergen": "dairy",
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Thin spread on toast, or cook vegetables in it.",
+    "9": "As a cooking fat or thin spread."
+   }
+  },
+  {
+   "name": "Peanut butter",
+   "slug": "peanut",
+   "category": "nut_seed",
+   "allergen": "peanut",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Thin with warm water to a runny consistency, spread thinly on toast.",
+    "9": "Thin layer on toast, or stirred into oatmeal."
+   },
+   "note": "Never a spoonful of thick peanut butter, it is a choking risk. Always thinned and spread thin."
+  },
+  {
+   "name": "Almond butter",
+   "slug": "almond",
+   "category": "nut_seed",
+   "allergen": "tree_nut",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Thin with water, spread thinly on toast.",
+    "9": "Thin layer on toast or in oatmeal."
+   },
+   "aliases": [
+    "almonds",
+    "almond"
+   ]
+  },
+  {
+   "name": "Cashew butter",
+   "slug": "cashew",
+   "category": "nut_seed",
+   "allergen": "tree_nut",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Thin with water, spread thinly, or stir into yogurt.",
+    "9": "Thin layer on toast or in yogurt."
+   },
+   "aliases": [
+    "cashew",
+    "cashews"
+   ]
+  },
+  {
+   "name": "Walnut",
+   "slug": "walnut",
+   "category": "nut_seed",
+   "allergen": "tree_nut",
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Grind to a fine flour and stir into oatmeal or yogurt.",
+    "9": "Finely ground into other foods."
+   },
+   "note": "Whole nuts and large pieces are a choking hazard until about 4 years. Always ground or as butter."
+  },
+  {
+   "name": "Pecan",
+   "slug": "pecan",
+   "category": "nut_seed",
+   "allergen": "tree_nut",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Grind fine and stir into oatmeal.",
+    "9": "Finely ground into other foods."
+   },
+   "note": "Never whole. Grind or serve as a thin butter."
+  },
+  {
+   "name": "Pistachio",
+   "slug": "pistachio",
+   "category": "nut_seed",
+   "allergen": "tree_nut",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Grind fine and stir into yogurt or oatmeal.",
+    "9": "Finely ground into other foods."
+   },
+   "note": "Never whole. Grind fine or serve as a thin butter."
+  },
+  {
+   "name": "Hazelnut",
+   "slug": "hazelnut",
+   "category": "nut_seed",
+   "allergen": "tree_nut",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Grind fine into oatmeal, or a thin layer of hazelnut butter.",
+    "9": "Ground, or thin butter on toast."
+   },
+   "note": "Never whole."
+  },
+  {
+   "name": "Brazil nut",
+   "common": false,
+   "slug": "brazil-nut",
+   "category": "nut_seed",
+   "allergen": "tree_nut",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Grind fine into other foods.",
+    "9": "Finely ground."
+   },
+   "note": "Never whole. Very high in selenium, so once a week at most."
+  },
+  {
+   "name": "Macadamia",
+   "common": false,
+   "slug": "macadamia-nut",
+   "category": "nut_seed",
+   "allergen": "tree_nut",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Grind fine, or thin macadamia butter on toast.",
+    "9": "Ground or as thin butter."
+   },
+   "note": "Never whole."
+  },
+  {
+   "name": "Tahini",
+   "slug": "sesame",
+   "category": "nut_seed",
+   "allergen": "sesame",
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Thin with water and spread thinly on toast, or stir into vegetables.",
+    "9": "Thin layer on toast, or drizzled over vegetables."
+   },
+   "note": "Thin it out. Thick tahini is as sticky as thick nut butter."
+  },
+  {
+   "name": "Sesame seeds",
+   "slug": "sesame",
+   "category": "nut_seed",
+   "allergen": "sesame",
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Sprinkle ground seeds over other foods, or use as a grip coating.",
+    "9": "Sprinkled whole or ground."
+   }
+  },
+  {
+   "name": "Chia seeds",
+   "slug": "chia-seeds",
+   "category": "nut_seed",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Soak into a pudding or stir into oatmeal.",
+    "9": "Soaked into porridge or yogurt."
+   },
+   "note": "Always soaked, never dry."
+  },
+  {
+   "name": "Hemp seeds",
+   "slug": "hemp-seeds",
+   "category": "nut_seed",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Sprinkle over yogurt, oatmeal, or vegetables.",
+    "9": "Sprinkled over other foods."
+   }
+  },
+  {
+   "name": "Flax seeds",
+   "slug": "flax",
+   "category": "nut_seed",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Ground only, stirred into oatmeal or yogurt.",
+    "9": "Ground, stirred into other foods."
+   },
+   "note": "Whole flax passes through undigested. Always ground."
+  },
+  {
+   "name": "Sunflower seed butter",
+   "slug": "sunflower-seed",
+   "category": "nut_seed",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Thin with water and spread thinly on toast.",
+    "9": "Thin layer on toast."
+   }
+  },
+  {
+   "name": "Pumpkin seed butter",
+   "slug": "pumpkin-seed",
+   "category": "nut_seed",
+   "allergen": null,
+   "iron": 2,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Thin with water, spread thinly on toast or stir into oatmeal.",
+    "9": "Thin layer on toast."
+   },
+   "note": "One of the better plant iron sources."
+  },
+  {
+   "name": "Coconut",
+   "slug": "coconut",
+   "category": "nut_seed",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Full-fat coconut milk stirred into porridge, or finely shredded.",
+    "9": "Coconut milk in cooking, or finely shredded."
+   }
+  },
+  {
+   "name": "Olive oil",
+   "slug": "olive-oil",
+   "category": "other",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook vegetables in it, or drizzle over finished food.",
+    "9": "As a cooking fat or finishing drizzle."
+   }
+  },
+  {
+   "name": "Avocado oil",
+   "slug": "avocado-oil",
+   "category": "other",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "As a cooking fat.",
+    "9": "As a cooking fat."
+   }
+  },
+  {
+   "name": "Honey",
+   "slug": "honey",
+   "category": "other",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 12,
+   "prep": {
+    "12": "Only after her first birthday."
+   },
+   "note": "Never before 12 months, because of infant botulism risk. This includes baked goods containing honey."
+  },
+  {
+   "name": "Basil",
+   "slug": "basil",
+   "category": "flavor",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Chop finely into vegetables, eggs, or pasta.",
+    "9": "Chopped into other foods."
+   }
+  },
+  {
+   "name": "Cilantro",
+   "slug": "cilantro",
+   "category": "flavor",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Chop finely and stir through beans, rice, or vegetables.",
+    "9": "Chopped into other foods."
+   }
+  },
+  {
+   "name": "Mint",
+   "slug": "mint",
+   "category": "flavor",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Chop finely into yogurt, peas, or fruit.",
+    "9": "Chopped into other foods."
+   }
+  },
+  {
+   "name": "Dill",
+   "slug": "dill",
+   "category": "flavor",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Chop finely into fish, yogurt, or potatoes.",
+    "9": "Chopped into other foods."
+   }
+  },
+  {
+   "name": "Parsley",
+   "slug": "parsley",
+   "category": "flavor",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Chop finely into grains or vegetables.",
+    "9": "Chopped into other foods."
+   }
+  },
+  {
+   "name": "Garlic",
+   "slug": "garlic",
+   "category": "flavor",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "Cook into vegetables and proteins.",
+    "9": "Cooked into other foods."
+   }
+  },
+  {
+   "name": "Ginger",
+   "slug": "ginger",
+   "category": "flavor",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "Grate a small amount into cooked dishes.",
+    "9": "Grated into cooked dishes."
+   }
+  },
+  {
+   "name": "Turmeric",
+   "slug": "turmeric",
+   "category": "flavor",
+   "allergen": null,
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "A pinch stirred into lentils, rice, or vegetables.",
+    "9": "A pinch in cooked dishes."
+   },
+   "note": "Stains everything permanently. Wear the bad shirt."
+  },
+  {
+   "name": "Cumin",
+   "slug": "cumin",
+   "category": "flavor",
+   "allergen": null,
+   "iron": 1,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "A pinch in beans, lentils, or roasted vegetables.",
+    "9": "A pinch in cooked dishes."
+   }
+  },
+  {
+   "name": "Cinnamon",
+   "slug": "cinnamon",
+   "category": "flavor",
+   "allergen": null,
+   "iron": 0,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "A pinch in oatmeal or over roasted squash.",
+    "9": "A pinch in porridge or fruit."
+   }
+  },
+  {
+   "name": "Paprika",
+   "slug": "paprika",
+   "category": "flavor",
+   "allergen": null,
+   "iron": 1,
+   "bitter": false,
+   "min_age": 6,
+   "prep": {
+    "6": "A pinch of sweet, not hot, paprika in cooked dishes.",
+    "9": "A pinch in cooked dishes."
+   }
+  },
+  {
+   "name": "Black pepper",
+   "slug": "black-pepper",
+   "category": "flavor",
+   "allergen": null,
+   "iron": 0,
+   "bitter": true,
+   "min_age": 6,
+   "prep": {
+    "6": "A small grind over cooked food.",
+    "9": "A small grind over cooked food."
+   }
+  }
+ ]
 }

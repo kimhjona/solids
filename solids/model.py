@@ -126,6 +126,15 @@ class LogEntry:
         return self.source != "assumed"
 
 
+def label_with_allergen(food: Food) -> str:
+    """"Peanut butter (peanut)", so it is obvious what each food is covering."""
+    if not food.allergen:
+        return food.name
+    from .config import ALLERGEN_LABELS
+
+    return f"{food.name} ({ALLERGEN_LABELS[food.allergen].lower()})"
+
+
 @dataclass
 class PlannedFood:
     food: Food
@@ -148,8 +157,17 @@ class DayPlan:
     anchors: list[PlannedFood] = field(default_factory=list)
     secondaries: list[Food] = field(default_factory=list)
     flavor: Food | None = None
+    vitamin_c: Food | None = None
     headline: str = ""
     cautions: list[str] = field(default_factory=list)
+
+    @property
+    def new_foods(self) -> list[PlannedFood]:
+        return [a for a in self.anchors if a.is_new]
+
+    @property
+    def new_names(self) -> str:
+        return ", ".join(label_with_allergen(a.food) for a in self.new_foods)
 
     @property
     def mains(self) -> list[PlannedFood]:
@@ -165,15 +183,16 @@ class DayPlan:
 
     @property
     def main_names(self) -> str:
-        return " + ".join(a.food.name for a in self.mains)
+        return " + ".join(label_with_allergen(a.food) for a in self.mains)
 
     @property
     def keeper_names(self) -> str:
-        return ", ".join(a.food.name for a in self.keepers)
+        return ", ".join(label_with_allergen(a.food) for a in self.keepers)
 
     @property
     def secondary_names(self) -> str:
         return ", ".join(f.name for f in self.secondaries)
 
     def all_foods(self) -> list[Food]:
-        return [a.food for a in self.anchors] + list(self.secondaries)
+        extra = [f for f in (self.vitamin_c,) if f is not None]
+        return [a.food for a in self.anchors] + extra + list(self.secondaries)

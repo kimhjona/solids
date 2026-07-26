@@ -5,7 +5,8 @@
     solids status                 where she stands against the goals
     solids log broccoli --ate all --reaction none
     solids grocery                the shopping list
-    solids daily                  the scheduled job: reconcile, plan, email
+    solids daily                  update the sheet for today, no email
+    solids weekly                 plan the week and email the table
 """
 
 from __future__ import annotations
@@ -192,8 +193,60 @@ def cmd_log(args, cfg: Config) -> int:
     return 0
 
 
+def cmd_weekly(args, cfg: Config) -> int:
+    """The Saturday job: plan the coming week and email it as a table.
+
+    Runs on Saturday afternoon so there is time to shop before it starts.
+    """
+    today = _today(args)
+    days = args.days or cfg.lookahead_days
+    start = today + dt.timedelta(days=1) if cfg.week_starts_tomorrow else today
+
+    catalog = load_catalog()
+    store = None if os.environ.get("SOLIDS_FIXTURE") else _open_store(cfg)
+    snap, entries, catalog, store = _snapshot(cfg, today, store)
+    plans = plan_ahead(entries, catalog, cfg, start, days)
+
+    log_url = None
+    if store:
+        from .sheet import PLAN_HEADER
+
+        store.ensure_tab(cfg.plan_tab, PLAN_HEADER)
+        for plan in plans:
+            _write_plan_row(store, cfg, plan)
+        _write_status_tab(store, cfg, snap)
+        gid = store.tab_gid(cfg.log_tab)
+        if gid is not None:
+            log_url = render.sheet_link(cfg.spreadsheet_id, gid)
+
+    html_body = render.render_week_html(plans, snap, log_url)
+    text_body = render.render_week_text(plans, snap)
+    subject = render.render_week_subject(plans, cfg)
+
+    if args.dry_run:
+        out = Path(args.out or "solids-week.html")
+        out.write_text(html_body)
+        print(text_body)
+        print(f"\n[dry run] Subject: {subject}")
+        print(f"[dry run] Wrote {out}")
+        return 0
+
+    from .mailer import send_email
+
+    send_email(
+        subject, html_body, text_body, cfg.mail_to, cfg.mail_from,
+        transport=cfg.mail_transport, store=store, outbox_tab=cfg.outbox_tab,
+    )
+    print(f"{'Queued' if cfg.mail_transport == 'outbox' else 'Sent'}: {subject}")
+    return 0
+
+
 def cmd_daily(args, cfg: Config) -> int:
-    """The scheduled job. Reconcile yesterday, plan today, write it down, send it."""
+    """The daily job. Reconcile yesterday, plan today, write it to the sheet.
+
+    It does not email. The inbox only gets the Saturday summary; this exists so
+    the sheet and `solids today` stay current in between.
+    """
     from .sheet import LOG_HEADER, PLAN_HEADER
 
     today = _today(args)
@@ -211,65 +264,15 @@ def cmd_daily(args, cfg: Config) -> int:
     plans = plan_ahead(entries, catalog, cfg, today, cfg.lookahead_days)
     today_plan = plans[0]
 
-    yesterday_plan = None
-    if store:
-        prior = store.read_plans(cfg.plan_tab, today).get(yesterday)
-        if prior and prior["main"]:
-            yesterday_plan = _plan_stub(yesterday, prior["main"], catalog)
-
-    confirm_url = log_url = None
-    if store:
+    if store and not args.dry_run:
         _write_plan_row(store, cfg, today_plan)
         _write_status_tab(store, cfg, snap)
-        gid = store.tab_gid(cfg.plan_tab)
-        row = store.read_plans(cfg.plan_tab, today).get(yesterday, {}).get("row")
-        if gid is not None and row:
-            confirm_url = render.sheet_link(cfg.spreadsheet_id, gid, f"E{row}")
-        log_gid = store.tab_gid(cfg.log_tab)
-        if log_gid is not None:
-            log_url = render.sheet_link(cfg.spreadsheet_id, log_gid)
 
-    html_body = render.render_email_html(plans, snap, yesterday_plan, confirm_url, log_url)
-    text_body = (
-        render.render_day_text(today_plan, snap)
-        + "\n\n"
-        + render.render_status_text(snap)
-    )
-    subject = render.render_email_subject(today_plan, cfg)
-
-    is_grocery_day = today.weekday() == cfg.grocery_weekday
-
-    if args.dry_run:
-        out = Path(args.out or "solids-email.html")
-        out.write_text(html_body)
-        print(text_body)
-        print(f"\n[dry run] Subject: {subject}")
-        print(f"[dry run] Wrote {out}")
-        if is_grocery_day:
-            grocery = Path(str(out).replace(".html", "-grocery.html"))
-            grocery.write_text(render.render_grocery_html(plans, snap))
-            print(f"[dry run] Wrote {grocery}")
-        return 0
-
-    from .mailer import send_email
-
-    def deliver(subj: str, html: str, text: str) -> None:
-        send_email(
-            subj, html, text, cfg.mail_to, cfg.mail_from,
-            transport=cfg.mail_transport, store=store, outbox_tab=cfg.outbox_tab,
-        )
-
-    verb = "Queued" if cfg.mail_transport == "outbox" else "Sent"
-    deliver(subject, html_body, text_body)
-    print(f"{verb}: {subject}")
-
-    if is_grocery_day:
-        deliver(
-            f"{cfg.baby_name}: groceries for the week",
-            render.render_grocery_html(plans, snap),
-            render.render_grocery_text(plans, snap),
-        )
-        print(f"{verb}: grocery list")
+    print(render.render_day_text(today_plan, snap))
+    print()
+    print(render.render_status_text(snap))
+    if store and not args.dry_run:
+        print("\nWrote the plan and status to the sheet. No email, that is Saturday's job.")
     return 0
 
 
@@ -419,17 +422,6 @@ Config lives at {CONFIG_PATH}.
 
 # --------------------------------------------------------------- helpers ----
 
-def _plan_stub(day: dt.date, main: str, catalog):
-    from .model import DayPlan, PlannedFood
-
-    plan = DayPlan(date=day)
-    for name in (n.strip() for n in main.split("+")):
-        food = catalog.get(name)
-        if food:
-            plan.anchors.append(PlannedFood(food=food))
-    return plan
-
-
 def _reconcile(store, cfg: Config, catalog, entries, day: dt.date) -> None:
     """Turn yesterday's plan into log rows.
 
@@ -528,10 +520,15 @@ def build_parser() -> argparse.ArgumentParser:
     sl.add_argument("--notes", default="")
     sl.set_defaults(fn=cmd_log)
 
-    sd = sub.add_parser("daily", help="the scheduled job")
-    sd.add_argument("--dry-run", action="store_true", help="write the email to a file instead")
-    sd.add_argument("--out", help="where to write the dry-run html")
+    sd = sub.add_parser("daily", help="update the sheet for today, no email")
+    sd.add_argument("--dry-run", action="store_true", help="render without writing or sending")
     sd.set_defaults(fn=cmd_daily)
+
+    sw = sub.add_parser("weekly", help="plan the coming week and email the table")
+    sw.add_argument("--days", type=int, default=0, help="defaults to lookahead_days")
+    sw.add_argument("--dry-run", action="store_true", help="write the email to a file instead")
+    sw.add_argument("--out", help="where to write the dry-run html")
+    sw.set_defaults(fn=cmd_weekly)
 
     return p
 

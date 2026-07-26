@@ -5,3 +5,4 @@ __pycache__/
 solids-email*.html
 service-account.json
 .pytest_cache/
+solids.config.json

@@ -28,6 +28,7 @@ class Food:
     prep: dict = field(default_factory=dict)
     note: str | None = None
     aliases: tuple = ()
+    vitamin_c: int = 0    # 0 none, 1 moderate, 2 high
     common: bool = True   # easy to buy at an ordinary grocery store
     anchor: bool = True   # substantial enough to build a meal around
 
@@ -42,6 +43,20 @@ class Food:
     @property
     def is_sweet_fruit(self) -> bool:
         return self.category == "fruit" and self.sweet
+
+    @property
+    def heme_iron(self) -> bool:
+        """Iron from meat, fish and shellfish, absorbed well on its own.
+
+        Egg is animal but its iron is non-heme and poorly absorbed, so it does
+        not count.
+        """
+        return self.category == "protein" and self.allergen != "egg"
+
+    @property
+    def plant_iron(self) -> bool:
+        """Iron that needs vitamin C alongside it to be absorbed properly."""
+        return self.iron >= 1 and not self.heme_iron
 
     def prep_for(self, band: str) -> str:
         """Prep guidance for an age band, falling back to the nearest younger one."""
@@ -58,8 +73,8 @@ _NONWORD = re.compile(r"[^a-z0-9 ]+")
 def normalize(name: str) -> str:
     """Fold a free-text food name into something matchable.
 
-    The tracker sheet has entries like "Edamame (Soy)", "Cantelope", "Broccoli "
-    and "Mango (pressed meta snack)", so this has to be forgiving.
+    A hand-kept sheet accumulates entries like "Edamame (Soy)", "Cantelope",
+    "Broccoli " and "Mango (the pressed snack)", so this has to be forgiving.
     """
     s = name.lower().strip()
     s = _PARENS.sub(" ", s)
@@ -139,6 +154,7 @@ def load_catalog(path: Path | None = None) -> Catalog:
                 prep=entry.get("prep", {}),
                 note=entry.get("note"),
                 aliases=tuple(entry.get("aliases", ())),
+                vitamin_c=entry.get("vitamin_c", 0),
                 common=entry.get("common", True),
                 anchor=entry.get("anchor", True),
             )

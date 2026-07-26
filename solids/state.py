@@ -77,13 +77,6 @@ class Snapshot:
     def allergen_introduced(self, allergen: str) -> bool:
         return self.allergen_last.get(allergen) is not None
 
-    def allergen_overdue_by(self, allergen: str) -> float:
-        """Days past the target interval. Negative means still in the window."""
-        gap = self.days_since_allergen(allergen)
-        if gap == BIG:
-            return BIG
-        return gap - self.config.allergen_interval_days
-
     # ---- goal tracking -------------------------------------------------
 
     @property
@@ -103,17 +96,6 @@ class Snapshot:
     @property
     def fruit_heavy(self) -> bool:
         return self.veg_ratio < self.config.veg_to_fruit_ratio
-
-    def overdue_allergens(self) -> list[tuple[str, float]]:
-        """Introduced allergens past their interval, worst first."""
-        out = []
-        for a in ALLERGENS:
-            if not self.allergen_introduced(a):
-                continue
-            over = self.allergen_overdue_by(a)
-            if over > 0:
-                out.append((a, over))
-        return sorted(out, key=lambda t: -t[1])
 
     def missing_allergens(self) -> list[str]:
         return [a for a in ALLERGENS if not self.allergen_introduced(a)]

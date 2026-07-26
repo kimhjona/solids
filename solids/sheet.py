@@ -1,8 +1,8 @@
 """Google Sheets access.
 
-Rules of engagement: the tab Lisha already uses is read-only as far as this
-program is concerned. We read it once to seed history, and everything we write
-goes into tabs we created ourselves.
+Rules of engagement: the hand-kept tab is read-only as far as this program is
+concerned. We read it once to seed history, and everything we write goes into
+tabs we created ourselves.
 """
 
 from __future__ import annotations

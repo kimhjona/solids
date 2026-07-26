@@ -1,4 +1,9 @@
-"""Tunable knobs. Everything the engine argues about lives here."""
+"""Tunable knobs. Everything the engine argues about lives here.
+
+Nothing personal belongs in this file. The real values live in a config JSON
+outside the repo, at SOLIDS_CONFIG or ~/.config/solids/config.json. See
+solids.config.example.json.
+"""
 
 from __future__ import annotations
 
@@ -12,7 +17,7 @@ CONFIG_PATH = Path(
     os.environ.get("SOLIDS_CONFIG", Path.home() / ".config" / "solids" / "config.json")
 )
 
-# The nine common allergens, in the order we show them.
+# The nine common allergens, in the order the rotation walks them.
 ALLERGENS = [
     "peanut",
     "tree_nut",
@@ -40,31 +45,31 @@ ALLERGEN_LABELS = {
 
 @dataclass
 class Config:
-    # Who
-    birthday: str = "2025-12-27"
-    baby_name: str = "Ava"
+    # Who. Set these in your own config file, not here.
+    birthday: str = "2025-01-01"
+    baby_name: str = "the baby"
 
     # Where the data lives
-    spreadsheet_id: str = "1FxFKrG2HKH-FV_viquagypDUaUi22jefCWNisbfw0Fc"
+    spreadsheet_id: str = ""
     log_tab: str = "Log"
     plan_tab: str = "Plan"
     status_tab: str = "Status"
 
     # Email
-    mail_to: str = "lishajonfamily@gmail.com"
-    mail_from: str = "lishajonfamily@gmail.com"
+    mail_to: str = ""
+    mail_from: str = ""
     # outbox needs no credential at all, see appsscript/Code.gs.
-    # resend needs a send-only API key. smtp needs a Gmail app password, which
-    # also grants full read access to the mailbox.
+    # resend needs a send-only API key. smtp needs an app password, which also
+    # grants full read access to the mailbox.
     mail_transport: str = "outbox"
     outbox_tab: str = "Outbox"
-    grocery_weekday: int = 5  # 0 = Monday, so 5 = Saturday
+    # The weekly email goes out on this day. 0 = Monday, so 5 = Saturday.
+    weekly_email_weekday: int = 5
+    # Plan the seven days starting tomorrow, so a Saturday email covers Sunday
+    # through Saturday and there is time to shop.
+    week_starts_tomorrow: bool = True
 
     # Goals
-    # Every 4 days works out to each allergen roughly 1.5 times a week. Twice a
-    # week for all nine at once is not reachable on two or three foods a day,
-    # and a target that can never be met just makes the status page useless.
-    allergen_interval_days: float = 4.0
     iron_days_per_week: int = 6           # iron-rich food on most days
     bitter_per_week: int = 4              # bitter vegetable exposures
     veg_to_fruit_ratio: float = 3.0       # vegetables per sweet fruit, 14-day window

@@ -17,7 +17,7 @@ import datetime as dt
 import zlib
 
 from .catalog import Catalog, Food
-from .config import ALLERGEN_LABELS, Config
+from .config import ALLERGEN_LABELS, ALLERGENS, Config
 from .model import DayPlan, LogEntry, PlannedFood
 from .state import Snapshot, build_snapshot
 
@@ -25,12 +25,9 @@ from .state import Snapshot, build_snapshot
 # Above the overdue cap, so introducing the last missing allergen beats
 # re-serving one she has already had.
 W_MISSING_ALLERGEN = 330.0
-W_OVERDUE_ALLERGEN = 45.0
-W_OVERDUE_PER_DAY = 12.0
-# Cap the urgency, but high enough that an allergen missing for two months
-# clearly outranks one that lapsed last week.
-OVERDUE_CAP_DAYS = 21.0
+W_ALLERGEN_TURN = 150.0
 W_IRON = 20.0
+W_VITAMIN_C = 18.0
 W_BITTER = 26.0
 W_VEG_WHEN_FRUIT_HEAVY = 16.0
 W_SWEET_FRUIT_PENALTY = 9.0
@@ -52,6 +49,21 @@ RECENCY_PENALTY = {0: -500.0, 1: -26.0, 2: -9.0}
 # What counts as "the main". Dairy, nuts and fruit are things you put on a plate,
 # not the reason you made it.
 MAIN_CATEGORIES = ("vegetable", "protein", "legume", "grain")
+
+
+def _allergens_for_day(day: dt.date, cfg: Config) -> list[str]:
+    """Which allergens are up today, on an even weekly cycle.
+
+    Nine allergens over seven days at two slots a day gives fourteen turns, so
+    each one comes round once or twice a week. The starting point shifts by
+    week, so the same allergen is not always on a Monday. No dates involved,
+    which is the point: the log only reliably records first exposures.
+    """
+    year, week, weekday = day.isocalendar()
+    slots = cfg.allergen_keepers_per_day
+    offset = (week * 7 * slots) % len(ALLERGENS)
+    start = (offset + (weekday - 1) * slots) % len(ALLERGENS)
+    return [ALLERGENS[(start + i) % len(ALLERGENS)] for i in range(slots)]
 
 
 def _jitter(food: Food, day: dt.date) -> float:
@@ -82,6 +94,10 @@ def score_food(
         return (-1e6, [])
 
     # --- allergens ---
+    #
+    # Repeat feedings mostly do not get written down, only first exposures, so
+    # "days since last" is not a number worth trusting. We rotate all nine
+    # evenly instead and never call anything late.
     if food.allergen and include_allergen:
         label = ALLERGEN_LABELS[food.allergen]
         if not snap.allergen_introduced(food.allergen):
@@ -91,16 +107,10 @@ def score_food(
                 # unhurried. Damped hard, so it genuinely waits for the weekend.
                 bonus *= 0.05
             score += bonus
-            reasons.append(f"{label} is the last common allergen she has not tried")
-        else:
-            over = snap.allergen_overdue_by(food.allergen)
-            gap = snap.days_since_allergen(food.allergen)
-            if over > 0:
-                score += W_OVERDUE_ALLERGEN + min(over, OVERDUE_CAP_DAYS) * W_OVERDUE_PER_DAY
-                reasons.append(f"{label} last landed {gap} days ago, target is every 3 to 4")
-            elif over > -1.5:
-                score += 12.0
-                reasons.append(f"{label} is due again")
+            reasons.append(f"{label} is the last common allergen not tried yet")
+        elif food.allergen in _allergens_for_day(day, cfg):
+            score += W_ALLERGEN_TURN
+            reasons.append(f"{label}'s turn in this week's rotation")
 
     # --- iron ---
     if food.iron >= 1 and snap.iron_short:
@@ -228,6 +238,31 @@ def _pick_secondaries(
     return chosen
 
 
+def _pick_vitamin_c(snap: Snapshot, day: dt.date, plan_foods: list[Food]) -> Food | None:
+    """Something with vitamin C to go with plant iron.
+
+    Iron from beans, lentils, grains, greens and seeds is non-heme, and eaten
+    on its own very little of it is absorbed. Vitamin C alongside it makes a
+    large difference. Iron from meat and fish does not need the help.
+    """
+    if not any(f.plant_iron for f in plan_foods):
+        return None
+    if any(f.vitamin_c >= 1 for f in plan_foods):
+        return None  # already covered by something on the plate
+
+    candidates = [
+        f for f in _candidates(snap, day)
+        if f.vitamin_c >= 2 and f.key not in {p.key for p in plan_foods}
+    ]
+    if not candidates:
+        return None
+    # Prefer vegetables over fruit, then rotate by how long since she had it.
+    candidates.sort(
+        key=lambda f: (f.is_sweet_fruit, -snap.days_since(f), _jitter(f, day))
+    )
+    return candidates[0]
+
+
 def _pick_flavor(snap: Snapshot, day: dt.date) -> Food | None:
     """One herb or spice a day. Cheap variety, and it makes food taste like food."""
     flavors = [f for f in snap.catalog if f.category == "flavor" and f.min_age <= snap.config.age_months(day)]
@@ -329,7 +364,7 @@ def plan_day(
             role="rechallenge",
         )
     else:
-        needed = {a for a, _ in snap.overdue_allergens()} | set(snap.missing_allergens())
+        needed = set(_allergens_for_day(day, cfg)) | set(snap.missing_allergens())
         ranked = rank(include_allergen=True)
         for cand in ranked:
             if len(anchors) >= cfg.allergen_keepers_per_day:
@@ -362,6 +397,7 @@ def plan_day(
     plan.secondaries = _pick_secondaries(
         snap, day, taken, cfg.secondaries_per_day, avoid_secondaries
     )
+    plan.vitamin_c = _pick_vitamin_c(snap, day, [a.food for a in anchors])
     plan.flavor = _pick_flavor(snap, day)
     plan.headline = _headline(snap, plan)
     plan.cautions = _cautions(snap, plan, day)
