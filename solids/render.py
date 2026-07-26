@@ -225,21 +225,39 @@ def _e(s: str) -> str:
     return html.escape(s, quote=True)
 
 
+# Borders are set inline on every cell as well as in the stylesheet, because
+# some mail clients drop <style> blocks and the grid is the point of the table.
+_B = "1px solid #d9d4cb"
+_TH = (f"border:{_B};padding:8px 10px;text-align:left;background:#f0ece5;"
+       "font-size:10px;text-transform:uppercase;letter-spacing:0.06em;"
+       "color:#6b6660;font-weight:700;")
+_TD = f"border:{_B};padding:10px;vertical-align:top;"
+
 _WEEK_CSS = """
-.week { width:100%; border-collapse:collapse; font-size:13px; }
-.week th { text-align:left; font-size:10px; text-transform:uppercase;
-  letter-spacing:0.06em; color:#8a8379; font-weight:600; padding:0 8px 8px 0;
-  border-bottom:1px solid #e5e1da; }
-.week td { padding:11px 8px 11px 0; border-bottom:1px solid #efece6;
-  vertical-align:top; }
-.week tr:last-child td { border-bottom:none; }
-.week .d { white-space:nowrap; font-weight:600; width:1%; }
-.week .m { font-weight:600; }
-.week .k { color:#6b6660; }
-.week .n { color:#40632f; font-weight:600; white-space:nowrap; }
-.week .r { background:#fdf6ec; }
+.week { width:100%; border-collapse:collapse; font-size:13px;
+  border:1px solid #d9d4cb; }
+.week th, .week td { border:1px solid #d9d4cb; padding:10px; vertical-align:top; }
+.week .d { white-space:nowrap; font-weight:700; width:1%; }
+.food { font-weight:600; }
+.food a { color:#20201d; text-decoration:none; border-bottom:1px solid #c9c3b8; }
+.prep { color:#6b6660; font-size:12px; margin:3px 0 0; }
+.stack { margin:0 0 12px; }
+.stack:last-child { margin-bottom:0; }
 .scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
 """
+
+
+def _food_cell(food, band: str, badge: str = "") -> str:
+    """A linked food name with its preparation underneath."""
+    bits = [
+        f"<p class='stack'><span class='food'>"
+        f"<a href='{_e(food.url)}'>{_e(food.name)}</a></span>{badge}"
+    ]
+    prep = food.prep_for(band)
+    if prep:
+        bits.append(f"<span class='prep' style='display:block'>{_e(prep)}</span>")
+    bits.append("</p>")
+    return "".join(bits)
 
 
 def render_week_html(
@@ -247,7 +265,7 @@ def render_week_html(
     snap: Snapshot,
     log_url: str | None = None,
 ) -> str:
-    """The Saturday email: the coming week as a table, then the shopping list."""
+    """The Saturday email: the coming week as one table you can cook from."""
     cfg = snap.config
     p: list[str] = [f"<style>{_CSS}{_WEEK_CSS}</style><div class='wrap'>"]
     start, end = plans[0].date, plans[-1].date
@@ -258,84 +276,58 @@ def render_week_html(
         f"{_e(age_string(cfg, start))}</p>"
     )
 
-    # --- the table ---
     p.append("<div class='card'><h2>The plan</h2><div class='scroll'>")
     p.append(
-        "<table class='week'><tr><th>Day</th><th>Main</th>"
-        "<th>Also serve</th><th>New</th></tr>"
+        f"<table class='week'><tr>"
+        f"<th style='{_TH}'>Day</th>"
+        f"<th style='{_TH}'>Main</th>"
+        f"<th style='{_TH}'>Also serve</th>"
+        f"</tr>"
     )
+
     for plan in plans:
-        rowcls = " class='r'" if plan.new_foods or any(
-            a.is_rechallenge for a in plan.anchors
+        band = cfg.age_band(plan.date)
+        shade = "background:#fdf6ec;" if (
+            plan.new_foods or any(a.is_rechallenge for a in plan.anchors)
         ) else ""
-        keepers = plan.keeper_names
+
+        mains = []
+        for a in plan.mains:
+            badge = ""
+            if a.is_new:
+                badge = "<span class='badge badge-new'>new</span>"
+            elif a.is_rechallenge:
+                badge = "<span class='badge badge-retry'>re-try</span>"
+            mains.append(_food_cell(a.food, band, badge))
+
+        also = []
+        for a in plan.keepers:
+            badge = "<span class='badge badge-new'>new</span>" if a.is_new else ""
+            label = ALLERGEN_LABELS[a.food.allergen].lower() if a.food.allergen else ""
+            tag = f"<span class='prep'> &middot; {_e(label)}</span>" if label else ""
+            also.append(_food_cell(a.food, band, badge + tag))
         if plan.vitamin_c:
-            extra = f"{plan.vitamin_c.name} (vitamin C)"
-            keepers = f"{keepers}, {extra}" if keepers else extra
+            also.append(
+                _food_cell(
+                    plan.vitamin_c, band,
+                    "<span class='prep'> &middot; vitamin C, helps her absorb the iron</span>",
+                )
+            )
+
         p.append(
-            f"<tr{rowcls}>"
-            f"<td class='d'>{_e(plan.date.strftime('%a'))}</td>"
-            f"<td class='m'>{_e(plan.main_names or '-')}</td>"
-            f"<td class='k'>{_e(keepers or '-')}</td>"
-            f"<td class='n'>{_e(plan.new_names or '')}</td>"
+            f"<tr>"
+            f"<td class='d' style='{_TD}{shade}'>{_e(plan.date.strftime('%a'))}</td>"
+            f"<td style='{_TD}{shade}'>{''.join(mains) or '-'}</td>"
+            f"<td style='{_TD}{shade}'>{''.join(also) or '-'}</td>"
             f"</tr>"
         )
     p.append("</table></div>")
     p.append(
-        "<p class='why'>Highlighted rows are the days with something new or a "
-        "re-try on them. Those are the days to keep the rest of the plate boring.</p>"
+        "<p class='why'>Shaded rows have something new or a re-try on them. "
+        "Those are the days to keep the rest of the plate boring. "
+        "Every food links to its Solid Starts page.</p>"
     )
     p.append("</div>")
-
-    # --- shopping ---
-    by_category: dict[str, list[str]] = {}
-    seen: set[str] = set()
-    for plan in plans:
-        for food in plan.all_foods():
-            if food.key in seen:
-                continue
-            seen.add(food.key)
-            by_category.setdefault(food.category, []).append(food.name)
-
-    p.append("<div class='card'><h2>Shopping list</h2>")
-    for category in ("protein", "vegetable", "fruit", "legume", "grain", "dairy", "nut_seed"):
-        if category not in by_category:
-            continue
-        p.append(
-            f"<p class='why' style='margin-bottom:2px'>"
-            f"{_e(category.replace('_', ' ').title())}</p>"
-            f"<p class='chips' style='margin-bottom:14px'>"
-            f"{_e(', '.join(sorted(by_category[category])))}</p>"
-        )
-    p.append(
-        "<p class='why'>The secondaries are already in this list, so nothing in "
-        "the week needs a second trip.</p></div>"
-    )
-
-    # --- how to serve the new things ---
-    new_items = [a for plan in plans for a in plan.new_foods]
-    retries = [a for plan in plans for a in plan.anchors if a.is_rechallenge]
-    if new_items or retries:
-        p.append("<div class='card'><h2>The ones to read about first</h2>")
-        for a in new_items + retries:
-            band = cfg.age_band(start)
-            p.append("<div class='item'>")
-            p.append(
-                f"<p class='keeper-food'>{_e(a.food.name)}"
-                + ("<span class='badge badge-new'>new</span>" if a.is_new
-                   else "<span class='badge badge-retry'>re-try</span>")
-                + "</p>"
-            )
-            if a.food.prep_for(band):
-                p.append(f"<p class='how'>{_e(a.food.prep_for(band))}</p>")
-            if a.food.note:
-                p.append(f"<p class='why'>{_e(a.food.note)}</p>")
-            p.append(
-                f"<p class='why link'><a href='{_e(a.food.url)}'>"
-                f"Solid Starts on {_e(a.food.name.lower())}</a></p>"
-            )
-            p.append("</div>")
-        p.append("</div>")
 
     # --- cautions worth carrying for the week ---
     cautions: list[str] = []
@@ -381,8 +373,6 @@ def render_week_text(plans: list[DayPlan], snap: Snapshot) -> str:
             f"   {also}{new}"
         )
     lines.append("")
-    lines.append(render_grocery_text(plans, snap))
-    lines.append("")
     lines.append(render_status_text(snap))
     return "\n".join(lines)
 
@@ -392,37 +382,3 @@ def render_week_subject(plans: list[DayPlan], cfg: Config) -> str:
     if new:
         return f"This week: {', '.join(new[:3])}" + (" and more" if len(new) > 3 else "")
     return f"This week's plan, from {short_date(plans[0].date)}"
-
-
-def render_grocery_html(plans: list[DayPlan], snap: Snapshot) -> str:
-    by_category: dict[str, list[str]] = {}
-    seen: set[str] = set()
-    for plan in plans:
-        for food in plan.all_foods():
-            if food.key in seen:
-                continue
-            seen.add(food.key)
-            by_category.setdefault(food.category, []).append(food.name)
-
-    start, end = plans[0].date, plans[-1].date
-    p = [f"<style>{_CSS}</style><div class='wrap'>"]
-    p.append(f"<h1>Groceries</h1><p class='sub'>{_e(short_date(start))} through {_e(short_date(end))}</p>")
-    p.append("<div class='card'>")
-    for category in ("protein", "vegetable", "fruit", "legume", "grain", "dairy", "nut_seed", "other"):
-        if category not in by_category:
-            continue
-        p.append(f"<h2>{_e(category.replace('_', ' ').title())}</h2>")
-        p.append(f"<p class='chips' style='margin-bottom:16px'>{_e(', '.join(sorted(by_category[category])))}</p>")
-    p.append("</div>")
-    p.append("<div class='card'>")
-    p.append("<h2>The week</h2>")
-    for plan in plans:
-        p.append(
-            f"<div class='day'><b>{_e(short_date(plan.date))}</b> &nbsp; {_e(plan.anchor_names)}</div>"
-        )
-    p.append("</div>")
-    p.append(
-        "<p class='foot'>This is a plan, not a contract. Buy what looks good and "
-        "the tracker will adjust.</p></div>"
-    )
-    return "".join(p)

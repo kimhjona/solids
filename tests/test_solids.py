@@ -406,8 +406,57 @@ def test_week_email_renders_a_row_per_day():
     plans = plan_ahead(BASELINE, CATALOG, CFG, TODAY, 7)
     html = render_week_html(plans, s, "https://example.com")
     assert html.count("<tr") >= 8  # header plus seven days
-    assert "Shopping list" in html
     assert "<script" not in html
+
+
+def test_week_table_has_borders_inline():
+    """Some mail clients drop <style>, and the grid is the point of the table."""
+    from solids.render import render_week_html
+
+    s = snap(BASELINE)
+    plans = plan_ahead(BASELINE, CATALOG, CFG, TODAY, 7)
+    html = render_week_html(plans, s)
+    assert html.count("border:1px solid") >= 8
+
+
+def test_every_food_in_the_table_links_to_solid_starts():
+    from solids.render import render_week_html
+
+    s = snap(BASELINE)
+    plans = plan_ahead(BASELINE, CATALOG, CFG, TODAY, 7)
+    html = render_week_html(plans, s)
+    for plan in plans:
+        for food in [a.food for a in plan.anchors] + (
+            [plan.vitamin_c] if plan.vitamin_c else []
+        ):
+            assert food.url in html, f"{food.name} was not linked"
+
+
+def test_table_carries_the_preparation_for_her_age_band():
+    from solids.render import render_week_html
+
+    s = snap(BASELINE)
+    plans = plan_ahead(BASELINE, CATALOG, CFG, TODAY, 7)
+    html = render_week_html(plans, s)
+    band = CFG.age_band(plans[0].date)
+    for plan in plans:
+        for a in plan.anchors:
+            prep = a.food.prep_for(band)
+            if prep:
+                # Rendered escaped, so compare against the escaped form.
+                import html as _h
+
+                assert _h.escape(prep, quote=True) in html, a.food.name
+
+
+def test_the_email_no_longer_carries_a_shopping_list():
+    from solids.render import render_week_html
+
+    s = snap(BASELINE)
+    plans = plan_ahead(BASELINE, CATALOG, CFG, TODAY, 7)
+    html = render_week_html(plans, s)
+    assert "Shopping list" not in html
+    assert "Groceries" not in html
 
 
 def test_email_escapes_food_notes():
