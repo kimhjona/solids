@@ -196,6 +196,13 @@ class SheetStore:
             if reaction == "other" and notes:
                 reaction = parse_reaction(notes)
 
+            # "Maybe" in the reaction column is a real answer, not a missing one.
+            # It means they saw something and are not sure it was the food, which
+            # is exactly what the attribution column is for.
+            attribution = ""
+            if any(w in reaction_s.lower() for w in ("maybe", "unsure", "possibly", "not sure")):
+                attribution = "unsure"
+
             lowered = notes.lower()
             if any(w in lowered for w in ("didn't really like", "didnt really like", "refused", "hated")):
                 ate = "some"
@@ -211,6 +218,7 @@ class SheetStore:
                     food=food,
                     ate=ate,
                     reaction=reaction,
+                    attribution=attribution,
                     notes=notes,
                     source="intro",
                 )
