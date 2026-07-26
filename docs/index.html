@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solids — a baby-led weaning tracker that tells you why</title>
+<meta name="description" content="Reads the feeding spreadsheet you already keep, decides what to feed the baby this week, and explains every choice. Iron, allergen rotation, bitter vegetables, and one new thing at a time.">
+<meta property="og:title" content="Solids — a baby-led weaning tracker that tells you why">
+<meta property="og:description" content="Reads the spreadsheet you already keep and emails a week of meals, with the reasoning attached.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Public+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#127859;</text></svg>">
+<style>
+/* ---------- tokens ---------- */
+:root {
+  --ground:   #F1F3EE;
+  --surface:  #FFFFFF;
+  --raised:   #E8EBE4;
+  --ink:      #15201A;
+  --muted:    #5E6B62;
+  --faint:    #8B968E;
+  --rule:     #D5DBD3;
+  --accent:   #2E6B45;
+  --accent-w: #E2EDE5;
+  --new:      #B4761B;
+  --new-w:    #F6EBD8;
+  --retry:    #9E4430;
+  --retry-w:  #F5E3DE;
+  --shadow:   0 1px 2px rgba(21,32,26,.05);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground:   #131711;
+    --surface:  #1B211A;
+    --raised:   #232A22;
+    --ink:      #E8EDE6;
+    --muted:    #9AA79E;
+    --faint:    #74817A;
+    --rule:     #2E362C;
+    --accent:   #86C89B;
+    --accent-w: #1E2C22;
+    --new:      #E0AC5C;
+    --new-w:    #2E2718;
+    --retry:    #E09480;
+    --retry-w:  #2E1F1B;
+    --shadow:   0 1px 2px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"] {
+  --ground:#131711; --surface:#1B211A; --raised:#232A22; --ink:#E8EDE6;
+  --muted:#9AA79E; --faint:#74817A; --rule:#2E362C; --accent:#86C89B;
+  --accent-w:#1E2C22; --new:#E0AC5C; --new-w:#2E2718; --retry:#E09480;
+  --retry-w:#2E1F1B; --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+:root[data-theme="light"] {
+  --ground:#F1F3EE; --surface:#FFFFFF; --raised:#E8EBE4; --ink:#15201A;
+  --muted:#5E6B62; --faint:#8B968E; --rule:#D5DBD3; --accent:#2E6B45;
+  --accent-w:#E2EDE5; --new:#B4761B; --new-w:#F6EBD8; --retry:#9E4430;
+  --retry-w:#F5E3DE; --shadow:0 1px 2px rgba(21,32,26,.05);
+}
+
+/* ---------- base ---------- */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 {
+  font-family: Fraunces, Georgia, "Times New Roman", serif;
+  font-variation-settings: "SOFT" 60, "WONK" 1;
+  text-wrap: balance;
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+p { margin: 0; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+.shell { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+.prose { max-width: 62ch; }
+
+/* ---------- ledger sections ---------- */
+.band { border-top: 1px solid var(--rule); }
+.band-inner {
+  display: grid;
+  grid-template-columns: 168px minmax(0, 1fr);
+  gap: 40px;
+  padding: 64px 0;
+}
+.gutter {
+  font-family: "DM Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+  padding-top: 6px;
+}
+.gutter span { display: block; position: sticky; top: 24px; }
+@media (max-width: 780px) {
+  .band-inner { grid-template-columns: 1fr; gap: 18px; padding: 44px 0; }
+  .gutter span { position: static; }
+}
+
+/* ---------- header ---------- */
+.masthead {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 22px 0;
+}
+.wordmark {
+  font-family: Fraunces, serif;
+  font-variation-settings: "SOFT" 80, "WONK" 1;
+  font-weight: 800; font-size: 21px; letter-spacing: -0.02em;
+  display: flex; align-items: center; gap: 9px;
+}
+.leaf { width: 17px; height: 17px; flex: none; color: var(--accent); }
+.masthead nav { display: flex; align-items: center; gap: 20px; font-size: 14px; }
+.masthead nav a { color: var(--muted); text-decoration: none; }
+.masthead nav a:hover { color: var(--ink); }
+.themer {
+  background: none; border: 1px solid var(--rule); color: var(--muted);
+  border-radius: 999px; padding: 5px 13px; font: inherit; font-size: 13px;
+  cursor: pointer;
+}
+.themer:hover { color: var(--ink); border-color: var(--faint); }
+@media (max-width: 560px) { .masthead nav a.hide-sm { display: none; } }
+
+/* ---------- hero ---------- */
+.hero { padding: 52px 0 64px; }
+.hero h1 {
+  font-size: clamp(38px, 7vw, 68px);
+  font-weight: 800;
+  line-height: 1.02;
+  font-variation-settings: "SOFT" 70, "WONK" 1;
+  max-width: 16ch;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--accent);
+  font-variation-settings: "SOFT" 90, "WONK" 1;
+}
+.lede { font-size: clamp(17px, 2.2vw, 20px); color: var(--muted); margin-top: 22px; max-width: 54ch; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 20px; border-radius: 999px; font-size: 15px; font-weight: 500;
+  text-decoration: none; border: 1px solid transparent; transition: transform .12s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--accent); color: var(--ground); }
+.btn-ghost { border-color: var(--rule); color: var(--ink); }
+.btn-ghost:hover { border-color: var(--faint); }
+
+/* ---------- the week demo ---------- */
+.demo { margin-top: 54px; }
+.demo-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap; margin-bottom: 14px;
+}
+.demo-title { font-family: "DM Mono", monospace; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
+.daybar { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+.daybar button {
+  font: inherit; font-size: 13px; font-weight: 500;
+  padding: 7px 15px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--muted);
+  white-space: nowrap; transition: background .15s ease, color .15s ease;
+}
+.daybar button:hover { color: var(--ink); }
+.daybar button[aria-selected="true"] { background: var(--ink); color: var(--ground); border-color: var(--ink); }
+
+.plate { border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
+.plate-head {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 13px 18px; background: var(--raised); border-bottom: 1px solid var(--rule);
+}
+.plate-head strong { font-family: Fraunces, serif; font-weight: 700; font-size: 16px; font-variation-settings: "SOFT" 60, "WONK" 0; }
+.plate-head .num { font-family: "DM Mono", monospace; font-size: 12px; color: var(--faint); }
+.row { padding: 16px 18px; border-bottom: 1px solid var(--rule); }
+.row:last-child { border-bottom: none; }
+.row-name { font-size: 17px; font-weight: 600; display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
+.tag {
+  font-family: "DM Mono", monospace; font-size: 11px; font-weight: 500;
+  padding: 2px 8px; border-radius: 4px; letter-spacing: .02em;
+  background: var(--accent-w); color: var(--accent); white-space: nowrap;
+}
+.tag.is-new { background: var(--new-w); color: var(--new); }
+.tag.is-retry { background: var(--retry-w); color: var(--retry); }
+.row-prep { font-size: 14.5px; color: var(--muted); margin-top: 6px; }
+.row-why {
+  font-size: 13.5px; color: var(--faint); margin-top: 8px;
+  padding-left: 13px; border-left: 2px solid var(--rule);
+}
+.row-why b { color: var(--muted); font-weight: 500; }
+.row-plus { padding: 14px 18px; background: var(--raised); font-size: 14px; color: var(--muted); }
+.row-plus .lbl { font-family: "DM Mono", monospace; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); display: block; margin-bottom: 3px; }
+.demo-foot { font-size: 13.5px; color: var(--faint); margin-top: 12px; }
+
+/* ---------- generic blocks ---------- */
+h2 { font-size: clamp(26px, 3.6vw, 34px); font-weight: 700; line-height: 1.15; }
+h3 { font-size: 18px; font-weight: 600; font-variation-settings: "SOFT" 50, "WONK" 0; }
+.band p + p { margin-top: 16px; }
+.band .prose p { color: var(--muted); }
+.band .prose p.first { color: var(--ink); font-size: 19px; }
+h2 + .prose, h2 + .stack { margin-top: 20px; }
+
+.stack { display: flex; flex-direction: column; gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; }
+.item { background: var(--surface); padding: 20px 22px; display: grid; grid-template-columns: 22px minmax(0,1fr); gap: 16px; }
+.item .mark { font-family: "DM Mono", monospace; font-size: 12px; color: var(--faint); padding-top: 3px; }
+.item p { color: var(--muted); font-size: 15px; margin-top: 5px; }
+@media (max-width: 560px) { .item { grid-template-columns: 1fr; gap: 6px; } .item .mark { padding-top: 0; } }
+
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.rule-card { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 22px; }
+.rule-card h3 { color: var(--ink); }
+.rule-card p { color: var(--muted); font-size: 15px; margin-top: 8px; }
+
+.limits { display: flex; flex-direction: column; gap: 14px; }
+.limit { display: grid; grid-template-columns: 18px minmax(0,1fr); gap: 12px; font-size: 15.5px; color: var(--muted); }
+.limit .x { color: var(--faint); font-family: "DM Mono", monospace; }
+
+.callout {
+  border: 1px solid var(--rule); border-left: 3px solid var(--retry);
+  background: var(--surface); border-radius: 8px; padding: 18px 20px;
+  font-size: 15px; color: var(--muted); margin-top: 26px;
+}
+.callout strong { color: var(--ink); font-weight: 600; }
+
+.terminal {
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 10px;
+  padding: 16px 18px; overflow-x: auto;
+  font-family: "DM Mono", ui-monospace, monospace; font-size: 13.5px; line-height: 1.75;
+  color: var(--muted);
+}
+.terminal .c { color: var(--accent); }
+.terminal .d { color: var(--faint); }
+
+footer { border-top: 1px solid var(--rule); padding: 40px 0 56px; font-size: 14px; color: var(--faint); }
+footer .rowf { display: flex; flex-wrap: wrap; gap: 10px 26px; align-items: center; justify-content: space-between; }
+footer a { color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+.fade { animation: fade .25s ease both; }
+@keyframes fade { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <header class="masthead">
+    <div class="wordmark">
+      <svg class="leaf" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 20c0-8 6-14 16-16 0 10-6 16-16 16Z" fill="currentColor" opacity=".9"/>
+        <path d="M4 20C7 15 11 11 16 8.5" stroke="var(--ground)" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      Solids
+    </div>
+    <nav>
+      <a href="#how" class="hide-sm">How it works</a>
+      <a href="#limits" class="hide-sm">Honest limits</a>
+      <a href="https://github.com/kimhjona/solids">Source</a>
+      <button class="themer" id="themer" type="button">Dark</button>
+    </nav>
+  </header>
+</div>
+
+<div class="shell">
+  <section class="hero">
+    <h1>It decides what the baby eats, and <em>tells you why</em>.</h1>
+    <p class="lede">
+      Solids reads the feeding spreadsheet you already keep by hand, then emails
+      a week of meals every Saturday afternoon. Iron first, all nine allergens in
+      rotation, vegetables ahead of fruit, and never more than one new thing a day.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="https://github.com/kimhjona/solids">Get it on GitHub</a>
+      <a class="btn btn-ghost" href="#week">See a week</a>
+    </div>
+
+    <div class="demo" id="week">
+      <div class="demo-head">
+        <span class="demo-title">A real week, generated from a sample history</span>
+        <div class="daybar" id="daybar" role="tablist" aria-label="Day of the week"></div>
+      </div>
+      <div class="plate" id="plate" aria-live="polite"></div>
+      <p class="demo-foot">
+        Every line carries the reason that produced it. If the reasoning looks wrong
+        to you, you are probably right, and your sheet stays the source of truth.
+      </p>
+    </div>
+  </section>
+</div>
+
+<section class="band" id="why">
+  <div class="shell band-inner">
+    <div class="gutter"><span>The problem</span></div>
+    <div class="prose">
+      <h2>Nobody can hold this in their head</h2>
+      <p class="first">
+        Starting solids means tracking nine common allergens, roughly a hundred
+        foods before the first birthday, which textures are safe this month, and a
+        set of half-remembered reactions that may or may not have been the food.
+      </p>
+      <p>
+        Most people end up with a spreadsheet. It records the first time a food was
+        given and then quietly stops being useful, because it cannot tell you what
+        to cook on a Tuesday.
+      </p>
+      <p>
+        Solids keeps that spreadsheet and adds the decision on top. You still own
+        the data. The tab you keep by hand is never written to.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="decides">
+  <div class="shell band-inner">
+    <div class="gutter"><span>What it optimizes</span></div>
+    <div>
+      <h2>Five opinions, in this order</h2>
+      <div class="stack" style="margin-top:22px">
+        <div class="item">
+          <div class="mark">01</div>
+          <div>
+            <h3>Iron, paired with vitamin C</h3>
+            <p>
+              Around seven months this is the one that actually matters medically.
+              Iron from beans, lentils, grains, greens and seeds is non-heme and
+              poorly absorbed alone, so every plate gets a vitamin C food and the
+              plan names which one it is. Meat and fish are heme and need no help.
+            </p>
+          </div>
+        </div>
+        <div class="item">
+          <div class="mark">02</div>
+          <div>
+            <h3>All nine allergens, on an even rotation</h3>
+            <p>
+              Introduced once and then forgotten is the common failure. Nine
+              allergens across seven days at two slots a day is fourteen turns, so
+              each comes round once or twice a week. It deliberately ignores dates,
+              because repeat feedings rarely get written down and a "days since"
+              figure would be fiction.
+            </p>
+          </div>
+        </div>
+        <div class="item">
+          <div class="mark">03</div>
+          <div>
+            <h3>Bitter vegetables, early</h3>
+            <p>
+              The real anti-picky-eater lever. Liking sweet is innate; liking bitter
+              is learned, and the window where a baby accepts kale and broccoli
+              without an argument does not stay open. Bitter foods get their own
+              weekly target.
+            </p>
+          </div>
+        </div>
+        <div class="item">
+          <div class="mark">04</div>
+          <div>
+            <h3>Food that got rejected comes back</h3>
+            <p>
+              Acceptance of a new flavor usually takes somewhere between eight and
+              fifteen exposures. Most trackers drop a food after a bad reception,
+              which is backwards. A refusal schedules a re-offer instead.
+            </p>
+          </div>
+        </div>
+        <div class="item">
+          <div class="mark">05</div>
+          <div>
+            <h3>Variety, toward a hundred foods</h3>
+            <p>
+              New foods get the least weight of the five, because most families are
+              already ahead on this one and the other four are where the misses are.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="rules">
+  <div class="shell band-inner">
+    <div class="gutter"><span>Safety</span></div>
+    <div>
+      <h2>Two rules it will not break</h2>
+      <div class="rules" style="margin-top:22px">
+        <div class="rule-card">
+          <h3>One new thing at a time</h3>
+          <p>
+            Never two new foods in a day. Never a first-time allergen next to
+            anything else new. A re-challenge after a reaction owns the whole day
+            by itself, and first allergens are held for a weekend when someone is
+            home and unhurried. Otherwise a reaction tells you nothing about what
+            caused it.
+          </p>
+        </div>
+        <div class="rule-card">
+          <h3>Reactions are never assumed</h3>
+          <p>
+            If nobody confirms a day, the plan is logged as assumed so the counters
+            keep moving. A reaction only ever gets recorded because a human typed
+            it. There is a column for whether you think it was actually the food,
+            and if you say it was not, the tool believes you.
+          </p>
+        </div>
+      </div>
+      <div class="callout">
+        <strong>This is not medical advice.</strong> It is a planner built around
+        general baby-led weaning guidance, and it has no idea about your child.
+        Anything that looks like a reaction belongs with your pediatrician, not a
+        spreadsheet. Re-challenge timing in particular is a setting you should
+        change to whatever they tell you.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="how">
+  <div class="shell band-inner">
+    <div class="gutter"><span>How it fits</span></div>
+    <div>
+      <h2>Three moving parts</h2>
+      <div class="stack" style="margin-top:22px">
+        <div class="item">
+          <div class="mark">01</div>
+          <div>
+            <h3>Your sheet</h3>
+            <p>
+              Point it at the Google Sheet you already have. It reads your tab once
+              to learn the history, tolerates the spelling drift that any hand-kept
+              sheet accumulates, and adds its own tabs for the log, the plan and a
+              status dashboard. Your original tab is read-only to the program.
+            </p>
+          </div>
+        </div>
+        <div class="item">
+          <div class="mark">02</div>
+          <div>
+            <h3>A scheduled job</h3>
+            <p>
+              Runs on GitHub Actions, free, so nothing depends on a laptop being
+              open. Each morning it refreshes the plan on the sheet. On Saturday
+              afternoon it plans the coming week and sends the email, with enough
+              notice to shop.
+            </p>
+          </div>
+        </div>
+        <div class="item">
+          <div class="mark">03</div>
+          <div>
+            <h3>The email, and a CLI when you want it</h3>
+            <p>
+              One message a week, one block per day, every food linked to its Solid
+              Starts page with preparation for the current age band. For anyone who
+              would rather type, the whole thing is a command line tool.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="terminal" style="margin-top:22px" aria-label="Example terminal session">
+<span class="d">$</span> <span class="c">solids today</span>
+Thursday, August 6  (7 months, 10 days)
+
+  - Beef (iron)
+      A finger-length strip of well-cooked steak to suck and gnaw.
+  - Pasta (wheat, iron, new)
+      Large shapes cooked past al dente, like rigatoni or fusilli.
+  - Snap peas (vitamin C)
+      Steam whole pods until soft.
+
+  Plus any of these: Apple, Yogurt, Wheat bread, Cucumber, Cauliflower
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="limits">
+  <div class="shell band-inner">
+    <div class="gutter"><span>Honest limits</span></div>
+    <div>
+      <h2>What it does not do</h2>
+      <div class="limits" style="margin-top:22px">
+        <div class="limit"><span class="x">—</span><span>It is not a product. Setup means creating a Google Cloud project, a service account, and sharing your sheet with it. Budget half an hour and some patience with consoles.</span></div>
+        <div class="limit"><span class="x">—</span><span>It knows nothing about your child specifically. Every weight and target is a general default you can change in a config file.</span></div>
+        <div class="limit"><span class="x">—</span><span>It cannot see what is in your fridge. It plans, you shop, and skipping a day is fine because next week reshuffles around it.</span></div>
+        <div class="limit"><span class="x">—</span><span>Its food catalog is about 150 foods, hand-written, with preparation by age band. Wide, not exhaustive. Adding one is a row of JSON.</span></div>
+        <div class="limit"><span class="x">—</span><span>Preparation guidance is written for the project and links out to Solid Starts rather than reproducing theirs. It is a reference, not an authority.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="shell band-inner">
+    <div class="gutter"><span>Start</span></div>
+    <div class="prose">
+      <h2>Take it and change the numbers</h2>
+      <p class="first">
+        Every opinion on this page is a constant in one file. If you think bitter
+        vegetables deserve less weight, or your pediatrician wants a longer gap
+        before re-challenging, that is a line edit rather than an argument with a
+        product.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="https://github.com/kimhjona/solids">Read the source</a>
+        <a class="btn btn-ghost" href="https://solidstarts.com">Solid Starts</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="shell rowf">
+    <span>Solids — a baby-led weaning tracker. Not medical advice.</span>
+    <span><a href="https://github.com/kimhjona/solids">github.com/kimhjona/solids</a></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var WEEK = [
+    { day: "Sunday", date: "8/2", foods: [
+      { name: "Blueberry", tags: [["re-try", "is-retry"]],
+        prep: "Smash flat, or serve cooked and burst.",
+        why: "23 days since the last reaction. Nothing else new today, so if it happens again you know what caused it." },
+      { name: "Collard greens", tags: [["iron", ""], ["vitamin C", ""]],
+        prep: "Braise whole leaves until very soft.",
+        why: "Carrying the vitamin C for the day, and bitter greens are behind their weekly target." }
+    ], plus: "Avocado, Egg, Sweet potato, Edamame, Peanut butter" },
+
+    { day: "Monday", date: "8/3", foods: [
+      { name: "Swiss chard", tags: [["iron", ""], ["vitamin C", ""], ["new", "is-new"]],
+        prep: "Wilt whole leaves, serve one leaf at a time.",
+        why: "The one new food today. Bitter, iron-rich, and it brings its own vitamin C." },
+      { name: "Sardine", tags: [["fish", ""], ["iron", ""]],
+        prep: "Mash a whole tinned sardine onto toast strips.",
+        why: "Fish's turn in this week's rotation, and one of the densest iron sources going." }
+    ], plus: "Apple, Yogurt, Wheat bread, Cucumber, Beef" },
+
+    { day: "Tuesday", date: "8/4", foods: [
+      { name: "Broccoli", tags: [["iron", ""], ["vitamin C", ""]],
+        prep: "Steam a whole floret with a long stalk as a handle, soft enough to squish.",
+        why: "Bitter exposure is behind for the week, and it covers the vitamin C." },
+      { name: "Walnut", tags: [["tree nut", ""], ["iron", ""], ["new", "is-new"]],
+        prep: "Grind to a fine flour and stir into oatmeal or yogurt.",
+        why: "Tree nut's turn in the rotation, and the only new thing today." },
+      { name: "Peanut butter", tags: [["peanut", ""], ["iron", ""]],
+        prep: "Thin with warm water to a runny consistency, spread thinly on toast.",
+        why: "Peanut's turn. Already familiar, so it can share a plate with something new." }
+    ], plus: "Banana, Tahini, Zucchini, Tofu, Green beans" },
+
+    { day: "Wednesday", date: "8/5", foods: [
+      { name: "Asparagus", tags: [["iron", ""], ["vitamin C", ""]],
+        prep: "Steam whole spears until floppy, serve one at a time.",
+        why: "Bitter, and it carries the day's vitamin C." },
+      { name: "Ricotta", tags: [["dairy", ""], ["new", "is-new"]],
+        prep: "Spread thickly on toast strips.",
+        why: "Dairy's turn, and a new texture rather than a new allergen." },
+      { name: "Egg", tags: [["egg", ""], ["iron", ""]],
+        prep: "Omelette cut into finger-length strips, or hard-boiled yolk mashed.",
+        why: "Egg's turn in the rotation. Keep the whole egg in, white and yolk." }
+    ], plus: "Avocado, Sweet potato, Edamame, Cashew butter, Carrot" },
+
+    { day: "Thursday", date: "8/6", foods: [
+      { name: "Beef", tags: [["iron", ""]],
+        prep: "A finger-length strip of well-cooked steak to suck and gnaw.",
+        why: "Heme iron, absorbed well on its own, so it needs no vitamin C partner." },
+      { name: "Pasta", tags: [["wheat", ""], ["iron", ""], ["new", "is-new"]],
+        prep: "Large shapes cooked past al dente, like rigatoni or fusilli.",
+        why: "Wheat's turn, and the one new food today." },
+      { name: "Edamame", tags: [["soy", ""], ["iron", ""]],
+        prep: "Shell, remove the skin, and smash flat.",
+        why: "Soy's turn in the rotation." },
+      { name: "Snap peas", tags: [["vitamin C", ""]],
+        prep: "Steam whole pods until soft.",
+        why: "Added because nothing else on the plate had vitamin C, and two of these are plant iron." }
+    ], plus: "Apple, Yogurt, Wheat bread, Cucumber, Cauliflower" },
+
+    { day: "Friday", date: "8/7", foods: [
+      { name: "Spinach", tags: [["iron", ""], ["vitamin C", ""]],
+        prep: "Cook and blend into another food, or serve large wilted leaves.",
+        mix: "Cannot be served alone. Mix it into the yogurt.",
+        why: "Iron and vitamin C in one leaf. Needs a vehicle, and the carrier is something already in the week's shopping." },
+      { name: "Sardine", tags: [["fish", ""], ["iron", ""]],
+        prep: "Mash a whole tinned sardine onto toast strips.",
+        why: "Fish's turn comes round again." },
+      { name: "Hummus", tags: [["sesame", ""], ["iron", ""], ["new", "is-new"]],
+        prep: "Spread thinly on toast strips or vegetable spears.",
+        why: "Sesame's turn, and the easiest way to keep sesame in the diet long-term." }
+    ], plus: "Banana, Tahini, Zucchini, Tofu, Green beans" },
+
+    { day: "Saturday", date: "8/8", foods: [
+      { name: "Shrimp", tags: [["shellfish", ""], ["iron", ""], ["new", "is-new"]],
+        prep: "Cook and mince finely. Rubbery served whole.",
+        mix: "Cannot be served alone. Mix it into the avocado.",
+        why: "Shellfish is the last of the nine allergens not tried yet, so it goes out alone, on a weekend, in the morning." },
+      { name: "Collard greens", tags: [["iron", ""], ["vitamin C", ""]],
+        prep: "Braise whole leaves until very soft.",
+        why: "Familiar, so it does not muddy the shellfish trial, and it covers the vitamin C." }
+    ], plus: "Avocado, Sweet potato, Cashew butter, Carrot, Oats" }
+  ];
+
+  var bar = document.getElementById("daybar");
+  var plate = document.getElementById("plate");
+  if (!bar || !plate) return;
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  function render(i) {
+    var d = WEEK[i];
+    var html = '<div class="plate-head"><strong>' + esc(d.day) +
+      '</strong><span class="num">' + esc(d.date) + "</span></div>";
+
+    d.foods.forEach(function (f) {
+      html += '<div class="row"><p class="row-name">' + esc(f.name);
+      f.tags.forEach(function (t) {
+        html += ' <span class="tag ' + t[1] + '">' + esc(t[0]) + "</span>";
+      });
+      html += "</p>";
+      html += '<p class="row-prep">' + esc(f.prep) + "</p>";
+      if (f.mix) html += '<p class="row-prep">' + esc(f.mix) + "</p>";
+      html += '<p class="row-why"><b>Why:</b> ' + esc(f.why) + "</p></div>";
+    });
+
+    html += '<div class="row-plus"><span class="lbl">Plus any of these</span>' +
+      esc(d.plus) + "</div>";
+
+    plate.innerHTML = html;
+    plate.classList.remove("fade");
+    void plate.offsetWidth;
+    plate.classList.add("fade");
+
+    Array.prototype.forEach.call(bar.children, function (b, j) {
+      b.setAttribute("aria-selected", j === i ? "true" : "false");
+    });
+  }
+
+  WEEK.forEach(function (d, i) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.setAttribute("role", "tab");
+    b.textContent = d.day.slice(0, 3);
+    b.addEventListener("click", function () { render(i); });
+    bar.appendChild(b);
+  });
+  render(0);
+
+  // --- theme ---
+  var root = document.documentElement;
+  var btn = document.getElementById("themer");
+  function prefersDark() {
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+  function current() {
+    return root.getAttribute("data-theme") || (prefersDark() ? "dark" : "light");
+  }
+  function paint() {
+    btn.textContent = current() === "dark" ? "Light" : "Dark";
+  }
+  btn.addEventListener("click", function () {
+    root.setAttribute("data-theme", current() === "dark" ? "light" : "dark");
+    paint();
+  });
+  paint();
+})();
+</script>
+</body>
+</html>
