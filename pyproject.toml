@@ -1,0 +1,22 @@
+[project]
+name = "solids"
+version = "0.1.0"
+description = "Baby-led weaning tracker that reads a Google Sheet and emails a daily plan"
+requires-python = ">=3.10"
+dependencies = [
+    "google-api-python-client>=2.100",
+    "google-auth>=2.23",
+]
+
+[project.scripts]
+solids = "solids.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["solids"]
+
+[tool.setuptools.package-data]
+solids = ["data/*.json"]
