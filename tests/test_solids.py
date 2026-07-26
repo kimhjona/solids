@@ -468,3 +468,109 @@ def test_email_escapes_food_notes():
     html = render_week_html(plans, s)
     assert "<img src=x" not in html
     assert "&lt;img" in html
+
+
+# --------------------------------------------------- labels and carriers ----
+
+def test_labels_are_plain_parentheticals_not_styled_badges():
+    """A CSS badge renders as "Kalenew" wherever styles get stripped."""
+    from solids.model import food_label
+
+    assert food_label(CATALOG.get("Kale"), is_new=True) == "Kale (iron, new)"
+    assert food_label(CATALOG.get("Spinach")) == "Spinach (iron)"
+    assert (
+        food_label(CATALOG.get("Shrimp"), is_new=True)
+        == "Shrimp (shellfish, iron, new)"
+    )
+    assert food_label(CATALOG.get("Cucumber")) == "Cucumber"
+
+
+def test_iron_foods_are_labelled_as_such():
+    from solids.model import food_label
+
+    for name in ("Lentils", "Beef", "Oats", "Spinach"):
+        assert "(iron" in food_label(CATALOG.get(name)) or ", iron" in food_label(
+            CATALOG.get(name)
+        )
+    assert "iron" not in food_label(CATALOG.get("Cucumber"))
+
+
+def test_every_day_has_a_vitamin_c_food_and_names_it():
+    for plan in plan_ahead(BASELINE, CATALOG, CFG, TODAY, 21):
+        source = plan.provides_vitamin_c()
+        assert source is not None, f"{plan.date} had no vitamin C"
+        assert source.vitamin_c >= 1
+
+
+def test_every_day_offers_secondary_foods():
+    for plan in plan_ahead(BASELINE, CATALOG, CFG, TODAY, 21):
+        assert plan.secondaries, f"{plan.date} had nothing to round the plate out"
+
+
+def test_foods_that_need_mixing_get_something_to_mix_into():
+    for plan in plan_ahead(BASELINE, CATALOG, CFG, TODAY, 28):
+        for a in plan.anchors:
+            if a.food.carrier_needed:
+                assert a.carrier is not None, f"{a.food.name} on {plan.date}"
+                assert a.carrier.good_carrier
+                assert a.carrier.key != a.food.key
+
+
+def test_a_carrier_is_never_a_food_being_introduced_that_day():
+    """Mixing into something new would make a reaction unattributable."""
+    for plan in plan_ahead(BASELINE, CATALOG, CFG, TODAY, 28):
+        new_keys = {a.food.key for a in plan.new_foods}
+        for a in plan.anchors:
+            if a.carrier is not None:
+                assert a.carrier.key not in new_keys
+
+
+def test_carriers_prefer_food_already_used_that_week():
+    plans = plan_ahead(BASELINE, CATALOG, CFG, TODAY, 7)
+    week = {f.key for plan in plans for f in plan.all_foods()}
+    for plan in plans:
+        for a in plan.anchors:
+            if a.carrier is not None:
+                assert a.carrier.key in week, f"{a.carrier.name} is an extra shop"
+
+
+def test_week_email_is_one_block_per_day():
+    from solids.render import render_week_html
+
+    s = snap(BASELINE)
+    plans = plan_ahead(BASELINE, CATALOG, CFG, TODAY, 7)
+    html = render_week_html(plans, s)
+    assert html.count("<table class='day-table'>") == 7
+    for plan in plans:
+        assert plan.date.strftime("%A") in html
+
+
+def test_week_email_html_is_well_formed():
+    import html.parser
+
+    from solids.render import render_week_html
+
+    class Checker(html.parser.HTMLParser):
+        TRACKED = ("table", "tr", "td", "th", "ul", "li", "div")
+
+        def __init__(self):
+            super().__init__()
+            self.stack, self.bad = [], []
+
+        def handle_starttag(self, tag, attrs):
+            if tag in self.TRACKED:
+                self.stack.append(tag)
+
+        def handle_endtag(self, tag):
+            if tag in self.TRACKED:
+                if not self.stack or self.stack[-1] != tag:
+                    self.bad.append(tag)
+                else:
+                    self.stack.pop()
+
+    s = snap(BASELINE)
+    plans = plan_ahead(BASELINE, CATALOG, CFG, TODAY, 7)
+    checker = Checker()
+    checker.feed(render_week_html(plans, s))
+    assert not checker.bad, f"mismatched tags: {checker.bad}"
+    assert not checker.stack, f"unclosed tags: {checker.stack}"

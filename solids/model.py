@@ -126,12 +126,46 @@ class LogEntry:
         return self.source != "assumed"
 
 
-def label_with_allergen(food: Food) -> str:
-    """"Peanut butter (peanut)", so it is obvious what each food is covering."""
-    if not food.allergen:
-        return food.name
+def food_tags(
+    food: Food,
+    is_new: bool = False,
+    is_rechallenge: bool = False,
+    vitamin_c: bool = False,
+) -> list[str]:
+    """The short parentheticals that say why a food is on the plate."""
     from .config import ALLERGEN_LABELS
 
+    tags: list[str] = []
+    if food.allergen:
+        tags.append(ALLERGEN_LABELS[food.allergen].lower())
+    if food.iron >= 1:
+        tags.append("iron")
+    if vitamin_c:
+        tags.append("vitamin C")
+    if is_rechallenge:
+        tags.append("re-try")
+    elif is_new:
+        tags.append("new")
+    return tags
+
+
+def food_label(
+    food: Food,
+    is_new: bool = False,
+    is_rechallenge: bool = False,
+    vitamin_c: bool = False,
+) -> str:
+    """"Shrimp (shellfish, iron, new)". Plain text, so no styling to strip."""
+    tags = food_tags(food, is_new, is_rechallenge, vitamin_c)
+    return f"{food.name} ({', '.join(tags)})" if tags else food.name
+
+
+def label_with_allergen(food: Food) -> str:
+    """Kept for the allergen-only case, e.g. the plan row written to the sheet."""
+    from .config import ALLERGEN_LABELS
+
+    if not food.allergen:
+        return food.name
     return f"{food.name} ({ALLERGEN_LABELS[food.allergen].lower()})"
 
 
@@ -145,6 +179,8 @@ class PlannedFood:
     # "main" is the food the day is built around. "keeper" is an allergen we are
     # keeping in her diet, usually a spread or a spoonful alongside the main.
     role: str = "main"
+    # Something to mix it into, when it cannot be served on its own.
+    carrier: Food | None = None
 
     @property
     def reason(self) -> str:
@@ -167,7 +203,16 @@ class DayPlan:
 
     @property
     def new_names(self) -> str:
-        return ", ".join(label_with_allergen(a.food) for a in self.new_foods)
+        return ", ".join(f"{a.food.name} (new)" for a in self.new_foods)
+
+    def provides_vitamin_c(self) -> Food | None:
+        """Whichever food on the plate is carrying the vitamin C."""
+        if self.vitamin_c is not None:
+            return self.vitamin_c
+        for food in self.all_foods():
+            if food.vitamin_c >= 1:
+                return food
+        return None
 
     @property
     def mains(self) -> list[PlannedFood]:

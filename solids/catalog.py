@@ -29,8 +29,10 @@ class Food:
     note: str | None = None
     aliases: tuple = ()
     vitamin_c: int = 0    # 0 none, 1 moderate, 2 high
-    common: bool = True   # easy to buy at an ordinary grocery store
-    anchor: bool = True   # substantial enough to build a meal around
+    common: bool = True          # easy to buy at an ordinary grocery store
+    anchor: bool = True          # substantial enough to build a meal around
+    carrier_needed: bool = False  # has to be mixed into or spread on something
+    good_carrier: bool = False    # soft and scoopable enough to carry something
 
     @property
     def key(self) -> str:
@@ -157,6 +159,8 @@ def load_catalog(path: Path | None = None) -> Catalog:
                 vitamin_c=entry.get("vitamin_c", 0),
                 common=entry.get("common", True),
                 anchor=entry.get("anchor", True),
+                carrier_needed=entry.get("carrier_needed", False),
+                good_carrier=entry.get("good_carrier", False),
             )
         )
     return Catalog(foods)

@@ -11,7 +11,9 @@
   "prep": "Baby-led weaning prep, keyed by age band (6 = 6-8mo, 9 = 9-11mo, 12 = 12mo+).",
   "note": "Anything worth saying out loud, especially choking risk.",
   "aliases": "Alternate spellings seen in the sheet.",
-  "vitamin_c": "0 none, 1 moderate, 2 high. Eaten alongside plant iron it markedly increases absorption."
+  "vitamin_c": "0 none, 1 moderate, 2 high. Eaten alongside plant iron it markedly increases absorption.",
+  "carrier_needed": "Cannot be served on its own; must be mixed into or spread on something.",
+  "good_carrier": "Soft and scoopable enough to carry another food."
  },
  "foods": [
   {
@@ -54,7 +56,8 @@
     "6": "Cook and blend into another food, or serve large wilted leaves.",
     "9": "Finely chop cooked spinach and mix in."
    },
-   "vitamin_c": 1
+   "vitamin_c": 1,
+   "carrier_needed": true
   },
   {
    "name": "Kale",
@@ -334,7 +337,8 @@
     "6": "Roast finger-length wedges, skin on for grip.",
     "9": "Cube roasted sweet potato."
    },
-   "vitamin_c": 1
+   "vitamin_c": 1,
+   "good_carrier": true
   },
   {
    "name": "Butternut squash",
@@ -348,7 +352,8 @@
     "6": "Roast finger-length wedges until very soft.",
     "9": "Cube roasted squash."
    },
-   "vitamin_c": 1
+   "vitamin_c": 1,
+   "good_carrier": true
   },
   {
    "name": "Acorn squash",
@@ -362,7 +367,8 @@
     "6": "Roast a wedge, let her scoop the flesh.",
     "9": "Cube the soft flesh."
    },
-   "vitamin_c": 1
+   "vitamin_c": 1,
+   "good_carrier": true
   },
   {
    "name": "Pumpkin",
@@ -376,7 +382,8 @@
     "6": "Roast finger-length wedges.",
     "9": "Cube roasted pumpkin."
    },
-   "vitamin_c": 1
+   "vitamin_c": 1,
+   "good_carrier": true
   },
   {
    "name": "Green beans",
@@ -404,7 +411,8 @@
     "6": "Smash cooked peas and mix into a scoopable food.",
     "9": "Whole cooked peas, lightly smashed."
    },
-   "vitamin_c": 1
+   "vitamin_c": 1,
+   "carrier_needed": true
   },
   {
    "name": "Snap peas",
@@ -540,7 +548,8 @@
    "prep": {
     "6": "Cook until sweet and soft, mixed into other foods.",
     "9": "Finely chopped cooked onion."
-   }
+   },
+   "carrier_needed": true
   },
   {
    "name": "Mushroom",
@@ -595,7 +604,8 @@
     "6": "Roast finger-length wedges, or serve mashed.",
     "9": "Cube roasted potato."
    },
-   "vitamin_c": 1
+   "vitamin_c": 1,
+   "good_carrier": true
   },
   {
    "name": "Yellow squash",
@@ -636,7 +646,8 @@
    "prep": {
     "6": "Finger-length spears of ripe avocado, rolled in fine crumbs for grip.",
     "9": "Bite-size cubes."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Banana",
@@ -650,7 +661,8 @@
    "prep": {
     "6": "Half a peeled banana with a strip of peel left as a handle.",
     "9": "Bite-size pieces, rolled in crumbs if slippery."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Apple",
@@ -1380,7 +1392,8 @@
     "6": "Cook and mince finely, mix into a scoopable food. Rubbery whole.",
     "9": "Finely chopped cooked shrimp."
    },
-   "note": "Often the easiest first shellfish to buy and to mince finely."
+   "note": "Often the easiest first shellfish to buy and to mince finely.",
+   "carrier_needed": true
   },
   {
    "name": "Crab",
@@ -1464,7 +1477,8 @@
    "prep": {
     "6": "Smash cooked beans flat, or mix into a scoopable mash.",
     "9": "Lightly smashed whole beans."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Chickpeas",
@@ -1491,7 +1505,8 @@
    "prep": {
     "6": "Cook very soft and serve thick, scoopable or on toast.",
     "9": "Whole cooked lentils."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Kidney beans",
@@ -1517,7 +1532,8 @@
    "prep": {
     "6": "Smash into a spread for toast strips.",
     "9": "Lightly smashed whole beans."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Pinto beans",
@@ -1530,7 +1546,8 @@
    "prep": {
     "6": "Smash, or serve as refried beans on toast.",
     "9": "Lightly smashed."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Split peas",
@@ -1544,7 +1561,8 @@
    "prep": {
     "6": "Cook into a thick scoopable dal.",
     "9": "Thick dal, or mixed into grains."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Edamame",
@@ -1599,7 +1617,8 @@
     "6": "Spread thinly on toast strips or vegetable spears.",
     "9": "As a dip for soft vegetable sticks."
    },
-   "note": "Counts as sesame exposure via the tahini, and it is the easiest way to keep sesame in rotation."
+   "note": "Counts as sesame exposure via the tahini, and it is the easiest way to keep sesame in rotation.",
+   "good_carrier": true
   },
   {
    "name": "Oats",
@@ -1612,7 +1631,8 @@
    "prep": {
     "6": "Thick oatmeal she can scoop, or pressed into finger-length bars.",
     "9": "Thick oatmeal, or oat bars."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Wheat bread",
@@ -1631,7 +1651,8 @@
     "wheat",
     "bread",
     "toast"
-   ]
+   ],
+   "good_carrier": true
   },
   {
    "name": "Pasta",
@@ -1670,7 +1691,8 @@
    "prep": {
     "6": "Cook well past done and serve in a moist clump.",
     "9": "Cooked soft, mixed into other foods."
-   }
+   },
+   "carrier_needed": true
   },
   {
    "name": "Quinoa",
@@ -1683,7 +1705,8 @@
    "prep": {
     "6": "Cook and serve in a moist clump she can scoop.",
     "9": "Mixed with soft vegetables."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Rice",
@@ -1697,7 +1720,8 @@
     "6": "Sticky short-grain rice pressed into a soft ball.",
     "9": "Rice balls or loose sticky rice."
    },
-   "note": "Vary grains rather than serving rice daily, because of arsenic. Avoid rice cereal as a staple."
+   "note": "Vary grains rather than serving rice daily, because of arsenic. Avoid rice cereal as a staple.",
+   "good_carrier": true
   },
   {
    "name": "Barley",
@@ -1754,7 +1778,8 @@
    "prep": {
     "6": "Cook into a thick porridge.",
     "9": "Thick porridge or moist clumps."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Amaranth",
@@ -1768,7 +1793,8 @@
    "prep": {
     "6": "Cook into a thick porridge.",
     "9": "Thick porridge, mixed with fruit or vegetables."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Teff",
@@ -1782,7 +1808,8 @@
    "prep": {
     "6": "Cook into a thick porridge, or serve injera strips.",
     "9": "Porridge or injera pieces."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Corn tortilla",
@@ -1795,7 +1822,8 @@
    "prep": {
     "6": "Warm and cut into finger-length strips, softened with a spread.",
     "9": "Bite-size pieces."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Yogurt",
@@ -1814,7 +1842,8 @@
     "dairy",
     "greek yogurt",
     "yoghurt"
-   ]
+   ],
+   "good_carrier": true
   },
   {
    "name": "Cheddar cheese",
@@ -1841,7 +1870,8 @@
    "prep": {
     "6": "Full-fat, served on a preloaded spoon.",
     "9": "Self-fed with a spoon."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Ricotta",
@@ -1854,7 +1884,8 @@
    "prep": {
     "6": "Spread thickly on toast strips.",
     "9": "Spread on toast or mixed into pasta."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Kefir",
@@ -1867,7 +1898,8 @@
    "prep": {
     "6": "Plain, thickened with oats or served in an open cup.",
     "9": "Plain, in an open or straw cup."
-   }
+   },
+   "good_carrier": true
   },
   {
    "name": "Butter",

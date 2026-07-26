@@ -239,16 +239,15 @@ def _pick_secondaries(
 
 
 def _pick_vitamin_c(snap: Snapshot, day: dt.date, plan_foods: list[Food]) -> Food | None:
-    """Something with vitamin C to go with plant iron.
+    """Make sure every day has a vitamin C food on it.
 
     Iron from beans, lentils, grains, greens and seeds is non-heme, and eaten
     on its own very little of it is absorbed. Vitamin C alongside it makes a
-    large difference. Iron from meat and fish does not need the help.
+    large difference, so every plate gets one rather than only the plant-iron
+    days. Returns None when the plate already carries its own.
     """
-    if not any(f.plant_iron for f in plan_foods):
-        return None
     if any(f.vitamin_c >= 1 for f in plan_foods):
-        return None  # already covered by something on the plate
+        return None  # already covered
 
     candidates = [
         f for f in _candidates(snap, day)
@@ -261,6 +260,42 @@ def _pick_vitamin_c(snap: Snapshot, day: dt.date, plan_foods: list[Food]) -> Foo
         key=lambda f: (f.is_sweet_fruit, -snap.days_since(f), _jitter(f, day))
     )
     return candidates[0]
+
+
+def _pick_carrier(
+    snap: Snapshot,
+    day: dt.date,
+    food: Food,
+    on_the_plate: list[Food],
+    week_foods: set[str],
+) -> Food | None:
+    """Something to mix a food into when it cannot be served on its own.
+
+    Minced shrimp and thinned nut butters need a vehicle. Prefer one already on
+    the plate, then one already used elsewhere in the week so the shopping does
+    not grow, then anything familiar.
+    """
+    # Never mix something into a food being introduced the same day, or a
+    # reaction stops pointing anywhere useful.
+    for f in on_the_plate:
+        if f.good_carrier and f.key != food.key and not snap.is_new(f):
+            return f
+
+    options = [
+        f for f in _candidates(snap, day)
+        if f.good_carrier and f.key != food.key and not snap.is_new(f)
+        and f.key not in {p.key for p in on_the_plate}
+    ]
+    if not options:
+        return None
+    options.sort(
+        key=lambda f: (
+            f.key not in week_foods,             # already shopping for it
+            not (snap.hist(f) and snap.hist(f).is_liked),  # known quantity
+            _jitter(f, day),
+        )
+    )
+    return options[0]
 
 
 def _pick_flavor(snap: Snapshot, day: dt.date) -> Food | None:
@@ -457,6 +492,7 @@ def plan_ahead(
     plans: list[DayPlan] = []
     last_rechallenge: dt.date | None = None
     recent_secondaries: list[set[str]] = []
+    week_foods: set[str] = set()
 
     for i in range(days):
         day = start + dt.timedelta(days=i)
@@ -470,6 +506,7 @@ def plan_ahead(
 
         plan = plan_day(snap, day, allow_rechallenge=allow_rc, avoid_secondaries=avoid)
         plans.append(plan)
+        week_foods.update(f.key for f in plan.all_foods())
         if any(a.is_rechallenge for a in plan.anchors):
             last_rechallenge = day
         recent_secondaries.append({f.key for f in plan.secondaries})
@@ -484,5 +521,16 @@ def plan_ahead(
                     ate="all",
                     source="assumed",
                 )
+            )
+
+    # Carriers last, so they can prefer something already bought for the week.
+    for plan in plans:
+        snap = build_snapshot(entries, catalog, config, today=plan.date)
+        for anchor in plan.anchors:
+            if not anchor.food.carrier_needed:
+                continue
+            plate = [f for f in plan.all_foods() if f.key != anchor.food.key]
+            anchor.carrier = _pick_carrier(
+                snap, plan.date, anchor.food, plate, week_foods
             )
     return plans
