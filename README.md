@@ -1,11 +1,15 @@
 # Solids
 
-A baby-led weaning tracker. It reads a Google Sheet you already keep by hand,
-decides what to feed the baby, says why, and emails the week ahead every
-Saturday afternoon so there is time to shop.
+A baby-led weaning tracker that removes the mental load of meal planning.
+
+It reads a Google Sheet you already keep by hand and emails the coming week
+every Saturday afternoon: what to cook each day, how to prepare it for the
+baby's age, and which allergen it covers. There is time to shop before it
+starts.
 
 The goal is not record keeping. It is that nobody has to hold nine allergens, a
-hundred foods, and a set of half-remembered reactions in their head.
+hundred foods, and a set of half-remembered reactions in their head. Each
+recommendation shows the thinking behind it, so you can overrule it.
 
 ## What it optimizes, in order
 
@@ -46,15 +50,20 @@ the only allergen line in the status table.
 
 ## What the Saturday email contains
 
-- **The week as a table**: day, the main, what to serve alongside it, and what
-  is new. Rows with something new or a re-try on them are highlighted.
-- **The shopping list**, grouped by aisle, covering everything in the week
-  including the flexible secondaries, so nothing needs a second trip.
-- **The ones to read about first**: prep instructions for the age band and a
-  Solid Starts link for each new food and each re-try.
+- **One bordered block per day**, stacked so it reads on a phone. Each food is
+  linked to its Solid Starts page and carries its preparation for the current
+  age band underneath.
+- **Plain-text tags** on every food saying what it is doing there: the allergen
+  it covers, whether it is an iron source, which food is carrying the vitamin C,
+  and whether it is new or a re-try. No styled badges, because mail clients strip
+  CSS and a badge then reads as "Kalenew".
+- **Something to mix it into** when a food cannot be served alone, chosen from
+  what is already on the plate or already used elsewhere that week.
+- **Plus any of these**: familiar foods to round the plate out, so no day in the
+  plan requires a shopping trip you did not already make.
 - **Worth knowing**: choking notes, first-allergen protocol, age-stage reminders.
-- **Where she stands**: iron, allergens not yet tried, vegetable-to-fruit ratio,
-  bitter exposures, foods tried.
+- **Where things stand**: iron, allergens not yet tried, vegetable-to-fruit
+  ratio, bitter exposures, foods tried.
 
 A separate job runs each morning to keep the Plan and Status tabs current. It
 does not email.
@@ -114,7 +123,7 @@ message a week, especially sitting in a CI secret store.
 
 ## Commands
 
-    solids today                    what to feed the baby now, and why
+    solids today                    today's plan and the thinking behind it
     solids plan --days 7            the week
     solids grocery --days 7         the shopping list
     solids status                   progress against the goals
